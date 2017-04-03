@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="content" class="floati">
+
+    <div class="header">
+        <span>Collections</span>
+    </div>
+    {% if current_user.data.role == "admin" %}
+    <div class="commandline">
+        <a href="{{url_for('admin.add_collection')}}">New</a>
+    </div>
+    {% endif %}
+
+    <div class="table">
+        <div class="table-header">
+            <span class="col3">Name</span>
+            <span>Description</span>
+            <span class="col2">Count</span>
+        </div>
+        {% for collection in collections %}
+        <a href="{{url_for('admin.documents', collection=collection._name)}}">
+            <span class="col3">{{ collection._name }}</span>
+            <span>{{ collection._schema._label }}</span>
+            <span class="col2">{{ collection._count }}</span>
+        </a>
+        {% endfor %}
+    </div>
+
+</div>
+<div id="commandbar" class="floati">
+
+</div>
+{% endblock %}

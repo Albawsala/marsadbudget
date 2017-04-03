@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="content" class="floati">
+  <hr>
+  {% if error  %}
+  <div class="alert alert-danger alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <strong> {{ error }}</strong>
+</div>
+  {% endif %}
+  <div class="panel panel-info">
+    <div class="panel-heading">Add resource </div>
+    <div class="panel-body">
+      <form class="" action="" enctype="multipart/form-data" method="post">
+        <div class="panel panel-warning">
+          <div class="panel-heading">year</div>
+          <div class="panel-body">
+            <input type="number" class="form-control" name="resource_year" required>
+          </div>
+        </div>
+        <div class="panel panel-warning">
+          <div class="panel-heading">type</div>
+          <div class="panel-body">
+            <select class="" name="resource_type" required>
+              <option value="LF">LF</option>
+              <option value="LFC">LFC</option>
+            </select>
+          </div>
+        </div>
+        <div class="panel panel-success">
+          <div class="panel-heading">file</div>
+          <div class="panel-body">
+            <input type="file" class="form-control" name="resources_XL" required>
+          </div>
+        </div>
+        <hr>
+        <input type="submit" class="btn btn-lg btn-success" value="add">
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

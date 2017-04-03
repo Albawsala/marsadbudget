@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block header %}
+<script type="text/javascript">
+var fields = {{fields|tojson|safe}};
+</script>
+<script type="text/javascript" src="/admin/static/core/search.js"></script>
+<script type="text/javascript" src="/admin/static/core/documents.1.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="content" class="{{is_iframe and 'iframe' or 'floati'}}">
+
+    <div class="header">Files</div>
+
+    <div class="commandline">
+        {% if not is_iframe %}
+        <a href="{{url_for('admin.add_file')}}">Upload</a>
+        {% endif %}
+        <form class="floati" action="{{url_for('admin.find_file', iframe=is_iframe)}}" method="POST" id="search">
+            <input name="_query" placeholder="Search..."/>
+            <input name="_path" type="hidden"/>
+        </form>
+    </div>
+
+    <div class="table">
+
+        <div class="pagination">
+            {% if not first_p %}
+            <a href="{{url_for('admin.files', before=files[0]['_id'], iframe=is_iframe)}}">◀</a>
+            {% else %}
+            <span>◀</span>
+            {% endif %}
+            {% if not last_p %}
+            <a class="left-5" href="{{url_for('admin.files', after=files[config.FILES_PAGE_MAX-1]['_id'], iframe=is_iframe)}}">▶</a>
+            {% else %}
+            <span class="left-5">▶</span>
+            {% endif %}
+        </div>
+
+        <div class="table-header">
+            <span>Title</span>
+            <span class="col2">Type</span>
+            <span class="col2">Lang</span>
+        </div>
+
+        {% for file in files %}
+        <a id="{{file._id}}" href="{{url_for('admin.edit_file', file_id=file._id)}}">
+            <span>{{ file.title }}</span>
+            <span class="col2">{{ file.type }}</span>
+            <span class="col2">{{ file.lang }}</span>
+        </a>
+        {% endfor %}
+
+    </div>
+
+</div>
+{% endblock %}

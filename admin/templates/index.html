@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="content" class="floati">
+
+	<div class="clearfloat top-20">
+		{% for flash in get_flashed_messages() %}
+		<p class="flash">{{flash}}</p>
+		{% endfor %}
+	</div>
+
+</div>
+{% endblock %}

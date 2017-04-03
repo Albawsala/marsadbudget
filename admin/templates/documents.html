@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block header %}
+<script type="text/javascript">
+var fields = {{fields|tojson|safe}};
+</script>
+<script type="text/javascript" src="/admin/static/core/search.js"></script>
+<script type="text/javascript" src="/admin/static/core/documents.1.js"></script>
+{% endblock %}
+
+{% macro renderChildren(obj) %}
+<optgroup label="{{name}}">
+{% for field in obj %}
+    <option value="{{field.name}}" data-type="{{field.type}}">{{field.name}}</option>
+{% endfor %}
+</optgroup>
+{% endmacro %}
+
+
+{% block content %}
+<div id="content" class="{{is_iframe and 'iframe' or 'floati'}}" data-collection="{{collection}}">
+    <div class="header">
+    {% if is_iframe %}
+        Collections<span>&nbsp;.&nbsp;</span>{{collection}}
+    {% else %}
+        <a href="{{url_for('admin.collections')}}">Collections</a><span>&nbsp;.&nbsp;</span>{{ collection }}
+    {% endif %}
+    </div>
+
+    <div class="commandline">
+    {% if not is_iframe %}
+        <a class="right-10" href="{{url_for('admin.add_document', collection=collection)}}">New</a>
+        {% if collection in current_user.data.shortcuts %}
+        <a href="{{url_for('admin.del_collection_shortcut', collection=collection, next=url_for('admin.documents', collection=collection))}}">Shortcut: Off</a>
+        {% else %}
+        <a href="{{url_for('admin.add_collection_shortcut', collection=collection, next=url_for('admin.documents', collection=collection))}}">Shortcut: On</a>
+        {% endif %}
+        {% if current_user.data.role == "admin" %}
+        <a class="left-10" href="{{url_for('admin.edit_collection', collection=collection)}}">Edit</a>
+        {% endif %}
+    {% endif %}
+        <form class="floati" action="{{url_for('admin.find_document', collection=collection, iframe=is_iframe)}}" method="POST" id="search">
+            <input name="_query" placeholder="Search..."/>
+            <input name="_path" type="hidden"/>
+        </form>
+    </div>
+
+    {% set labels, getters = featured %}
+    {% if docs|count %}
+    <div class="table">
+        <div class="pagination">
+            {% if not first_p %}
+            <a href="{{url_for('admin.documents', collection=collection, before=docs[0]._id, iframe=is_iframe)}}">◀</a>
+            {% else %}
+            <span>◀</span>
+            {% endif %}
+            {% if not last_p %}
+            <a href="{{url_for('admin.documents', collection=collection, after=docs[config.PAGE_MAX-1]._id, iframe=is_iframe)}}" class="left-5">▶</a>
+            {% else %}
+            <span class="left-5">▶</span>
+            {% endif %}
+        </div>
+
+        <div class="table-header">
+            {% for label in labels %}<span>{{ label }}</span>{% endfor %}
+        </div>
+
+        {% for doc in docs %}
+        <a id="{{doc._id}}" href="{{url_for('admin.edit_document', collection=collection, doc_id=doc._id)}}">
+            {% for getter in getters %}<span>{{ getter(doc) }}</span>{% endfor %}
+        </a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="content" class="floati">
+
+    <div class="header">
+        <span>New project(s)</span>
+    </div>
+    <div class="table">
+        <div class="table-header">
+          <form class="" action="" method="post" enctype="multipart/form-data">
+            <input type="file" name="project_XL">
+            <input type="submit" value="add">
+          </form>
+    </div>
+
+</div>
+{% if error != '' %}
+<div class="flash">{{ error }}</div>
+{% endif %}
+{% endblock %}

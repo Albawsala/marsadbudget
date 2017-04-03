@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="content" class="floati">
+  <hr>
+  <div class="panel panel-info">
+    <div class="panel-heading">projects <span class="pull-right"><a class="btn btn-default btn-sm" style="padding-bottom : 3px" href="{{ url_for('admin.new_project') }}">Add / update</a></span></div>
+    <div class="panel-body">
+      <div class="list-group">
+        <a class="list-group-item active" href="#">
+          <div class="btn-group btn-group-justified active disabled" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+              titre
+            </div>
+            <div class="btn-group" role="group">
+              gouvernorat
+            </div>
+            <div class="btn-group" role="group">
+              secteur
+            </div>
+          </div>
+        </a>
+        {% for project in projects %}
+        <a class="list-group-item" href="{{url_for('admin.edit_project' , project_id=project._id)}}">
+          <div class="btn-group btn-group-justified" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+              {{ project.titre.fr }}
+            </div>
+            <div class="btn-group" role="group">
+              {{  project.gouvernorat.fr }}
+            </div>
+            <div class="btn-group" role="group">
+              {{ project.secteur.fr }}
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+  <!-- <div class="panel panel-info">
+  <div class="table">
+  <div class="panel-heading">
+
+  <div class="table-header">
+  <span class="col3">titre</span>
+  <span>gouvernorat</span>
+  <span class="col2">secteur</span>
+</div>
+</div>
+<div class="panel-body">
+{% for project in projects %}
+<a href="{{url_for('admin.edit_project' , project_id=project._id)}}">
+<span class="col3">{{ project.titre.fr }}</span>
+<span>{{ project.gouvernorat.fr }}</span>
+<span class="col2">{{ project.secteur.fr }}</span>
+</a>
+{% endfor %}
+</div>
+</div> -->
+
+</div>
+<div id="commandbar" class="floati">
+
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+<html>
+<head>
+	<style type="text/css">
+	body{
+		margin: 15px 10px;
+		font-size: 14px;
+		font-family: 'Tahoma';
+		line-height: 1.5em;
+		background-color: #eee;
+	}
+	#liste > div{
+		float: left;
+		width: 160px;
+		height: 120px;
+		padding: 5px;
+		background-color: white;
+		margin: 10px;
+	}
+	#liste > div > #upload{
+		display: block;
+		line-height: 120px;
+		font-size: 50px;
+		color: #777;
+		text-decoration: none;
+		text-align: center;
+	}
+	#liste > div:hover{
+		background-color: #ccc;
+	}
+	#liste > div > img{
+		max-width: 160px;
+		max-height: 120px;
+	}
+	#pagination{
+		width: 50px;
+		margin: 10px auto;
+	}
+	#pagination > *{
+		text-decoration: none;
+		width: 25px;
+		font-size: 20px;
+		text-align: center;
+	}
+	</style>
+    
+    <script type="text/javascript" src="/admin/static/jquery.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function()
+	{
+		$('#liste > .image').click(function()
+		{
+			var msg = {
+				url: $(this).children('img').attr('src'),
+				editor: $('body').data('editor')
+			}
+			window.parent.postMessage(msg, '*');
+			return false;
+		});
+	})
+	</script>
+</head>
+
+<body data-editor="{{request.args.editor}}">
+	<div id="liste">
+		<div><a id="upload" href="{{url_for('admin.add_image', editor=request.args.editor)}}">+</a></div>
+		{% for img in liste %}
+		<div class="image"><img src="{{img._id|path}}"/></div>
+		{% endfor %}
+	</div>
+
+	{% if todo %}
+	<div id="pagination">
+		{% if not first_page %}
+        <a href="{{url_for('admin.images', before=liste[0]['_id'])}}">◀</a>
+        {% else %}
+        <span>◀</span>
+        {% endif %}
+        
+        {% if not last_page %}
+        <a class="left-5" href="{{url_for('admin.images', after=liste[10]['_id'])}}">▶</a>
+        {% else %}
+        <span class="left-5">▶</span>
+        {% endif %}
+	</div>
+	{% endif %}
+</body>
+</html>

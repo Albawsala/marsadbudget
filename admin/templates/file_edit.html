@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block header %}
+<script type="text/javascript">
+$(document).ready(function()
+{
+    $('#close-iframe').click(function()
+    {
+        window.parent.postMessage({'method': 'close_iframe'}, window.location.origin);
+        return false;
+    })
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="content" class="{{is_iframe and 'iframe' or 'floati'}}">
+
+    <div class="header">
+        {% if is_iframe %}
+        <span>Files</span>
+        {% else %}
+        <a href="{{url_for('admin.files')}}">Files</a>
+        {% endif %}
+        <span>.</span>
+        <span>Edit</span>
+    </div>
+
+    <div class="commandline">
+        <a class="right-10" href="{{url_for('admin.del_file', file_id=file._id)}}">delete</a>
+    </div>
+    
+    <form class="form" action="{{url_for('admin.edit_file', file_id=file._id, iframe=is_iframe)}}" method="POST" enctype="multipart/form-data">
+        <input name="_csrf" type="hidden" value="{{csrf}}"/>
+        
+        <div class="docfield simple">
+            <label>Title</label>
+            <input name="title" type="text" value="{{ file.title }}"/>
+        </div>
+
+        <div class="docfield value">
+            <label>File</label>
+            <a class="value" href="{{ file._id|path }}">{{ file.filename }}</a>
+        </div>
+
+        <div class="docfield value">
+            <label>Type</label>
+            <span class="value">{{file.type}}</span>
+        </div>
+        {% if file.type == 'DOC' %}
+        <div class="docfield choice">
+            <label>Lang</label>
+            <select name="lang">
+                <option value="fr" {{file.lang == 'fr' and 'selected'}}>français</option>
+                <option value="ar" {{file.lang == 'ar' and 'selected'}}>arabe</option>
+                <option value="en" {{file.lang == 'en' and 'selected'}}>anglais</option>
+            </select>
+        </div>
+        {% else %}
+        <div class="docfield numeric">
+            <label>Resize width</label>
+            <input name="width" type="text" placeholder="450 pour chroniques, 500 pour albawsala" value="{{ file.width }}"/>
+        </div>
+        {% endif %}
+        <div class="top-40">
+            <input type="submit" value="Update">
+        </div>
+        
+        {% for msg in get_flashed_messages() %}
+        <div class="flash">{{ msg }}</div>
+        {% endfor %}
+    </form>
+
+</div>
+{% endblock %}

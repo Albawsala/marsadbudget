@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block header %}
+	<script type="text/javascript" src="/admin/static/blog/ckeditor.js">	</script>
+{% endblock %}
+
+{% block content %}
+<div id="content" class="floati">
+  <hr>
+  <div class="panel panel-info">
+    <div class="panel-heading">edit article :{{ article.titre.fr }} <span class="pull-right"><a class="btn btn-default btn-sm" href="{{ url_for('admin.delete_article' , article_id=article._id) }}">Delete</a></span>
+    </div>
+    <div class="panel-body">
+      <form action="" method="post" enctype="multipart/form-data" id="article_form">
+        <div class="panel panel-danger">
+          <div class="panel-heading">titre</div>
+          <div class="panel-body">
+            Titre (version française) <input type="text" class="form-control" name="titre_fr" required="true" value="{{ article.titre.fr }}">
+            Titre (version arab) <input type="text" class="form-control" name="titre_ar" required="true" value="{{ article.titre.ar }}">
+          </div>
+        </div>
+        <hr>
+        <div class="panel panel-danger">
+          <div class="panel-heading">Contenu</div>
+          <div class="panel-body">
+            Contenu (fr) <textarea style="height:800px" class="form-control" name="contenu_fr" form="article_form" required="true">{{ article.contenu.fr }}</textarea>
+			<script>
+				CKEDITOR.replace( 'contenu_fr', {extraPlugins: 'chart'}  );
+        		</script>
+            Contenu (ar) <textarea style="height:800px" class="form-control" name="contenu_ar" form="article_form" required="true">{{ article.contenu.ar }}</textarea>
+          		<script>
+				CKEDITOR.replace( 'contenu_ar');//, {extraPlugins: 'chart'} );
+        		</script>
+	  </div>
+        </div>
+        <hr>
+        <div class="panel panel-danger">
+          <div class="panel-heading">Image</div>
+          <div class="panel-body">
+            image <input type="file" name="image" class="form-control">
+          </div>
+        </div>
+        <hr>
+        
+        <hr>
+        <input type="submit" value="sauvgarder modification" class="btn btn-lg btn-danger">
+      </form>
+    </div>
+
+  </div>
+  {% if error != '' %}
+  <div class="flash">{{ error }}</div>
+  {% endif %}
+  {% endblock %}

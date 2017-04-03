@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div id="content" class="floati">
+  <hr>
+  <div class="panel panel-info">
+    <div class="panel-heading">resources <span class="pull-right"><a class="btn btn-default btn-sm" style="padding-bottom : 3px" href="{{ url_for('admin.new_resource') }}">Add / update</a></span></div>
+    <div class="panel-body">
+      <div class="list-group">
+        <a class="list-group-item active" href="#">
+          <div class="btn-group btn-group-justified active disabled" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+              année
+            </div>
+            <div class="btn-group" role="group">
+              type
+            </div>
+          </div>
+        </a>
+        {% for resource in resources %}
+        <a class="list-group-item" href="{{url_for('admin.edit_resource' , resource_id=resource._id)}}">
+          <div class="btn-group btn-group-justified" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+              {{ resource.year }}
+            </div>
+            <div class="btn-group" role="group">
+              {{  resource.type }}
+            </div>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+<div id="commandbar" class="floati">
+
+</div>
+{% endblock %}

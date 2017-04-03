@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <script type="text/javascript" src="/admin/static/core/collection.2.js"></script>
+    <script type="text/javascript" src="/admin/static/core/collection_add.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="content" class="floati">
+
+    <div class="header">
+        <a href="{{url_for('admin.collections')}}">Collections</a>
+        <span>.</span>
+        <span>New</span>
+    </div>
+
+    <div class="form" id="collection-form">
+        <input name="_csrf" type="hidden" value="{{ csrf }}"/>
+
+        <div class="docfield">
+            <label>Name:</label>
+            <input type="text" name="_collection"/>
+        </div>
+
+        <div class="docfield">
+            <label>Description:</label>
+            <input type="text" name="_description"/>
+        </div>
+
+        <div class="docfield">
+            <div class="float" id="langs">
+                <input type="checkbox" id="lang-ar" value="ar" class="float"/><label for="lang-ar">Arabe</label>
+                <input type="checkbox" id="lang-fr" value="fr" class="clearfloat"/><label for="lang-fr">Français</label>
+                <input type="checkbox" id="lang-en" value="en" class="clearfloat"/><label for="lang-en">Anglais</label>
+            </div>
+        </div>
+
+        <div class="clearfloat top-10" id="schema"></div>
+
+        <div class="clearfloat top-40">
+            <input type="submit" name="_preview" value="Preview"/>
+            <input type="submit" name="_send" value="Save" class="left-10"/>
+        </div>
+    </div>
+    
+    <div class="clearfloat top-10 flash"></div>
+
+</div>
+{% endblock %}

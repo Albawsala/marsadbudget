@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block header %}
+    <script type="text/javascript" src="/admin/static/core/collection.2.js"></script>
+    <script type="text/javascript" src="/admin/static/core/collection_edit.js"></script>
+{% endblock %}
+
+{% block content %}
+{% set name, root = collection._name, collection._schema %}
+<div id="content" class="floati">
+
+    <div class="header">
+        <a href="{{url_for('admin.collections')}}">Collections</a>
+        <span>.</span>
+        <a href="{{url_for('admin.documents', collection=name)}}">{{name}}</a>
+        <span>.</span>
+        <span>Edit</span>
+    </div>
+
+    <div class="commandline">
+        <a href="{{url_for('admin.del_collection', collection=name)}}">delete</a>
+    </div>
+
+    <div class="form" id="collection-form">
+        <input type="hidden" name="_csrf" value="{{csrf}}"/>
+        <input type="hidden" name="_collection" value="{{name}}"/>
+
+        <div class="docfield">
+            <label for="description">Description:</label>
+            <input type="text" name="_description" value="{{root._label}}"/>
+        </div>
+
+        <div id="schema">
+        {{ printField(root) }}
+        </div>
+
+        <div class="clearfloat top-40">
+            <input type="submit" name="_preview" value="Preview"/>
+            <input type="submit" name="_send" value="Save" class="left-10"/></p>
+        </div>
+    </div>
+    
+    <div class="flash"></div>
+
+</div>
+{% endblock %}
+
+{% macro printField(obj) %}
+{% for key in obj._order %}
+{% set field = obj[key] %}
+<div class="field">
+<div class="row">
+    <span class="trigger clone"></span>
+    <div id="setup">
+{% set ft_class = "" %}
+{% if "featured" in field._setup %}
+    {% set ft_class = "on" %}
+{% elif field._type in ['options','object','file'] %}
+    {% set ft_class = "disabled" %}
+{% endif %}
+        <span id="featured" class="{{ft_class}}">F</span>
+        <span id="multiple" class="disabled">M</span>
+        <span id="multilang" class="disabled">L</span>
+    </div>
+    <span class="field-value" id="key">{{key}}</span>
+    <input type="text" name="label" value="{{field._label}}"/>
+    <span class="field-value" id="type">{{field._type}}</span>
+    {% if field._type in ["string", "numeric", "reference"] %}
+    <span class="field-value" id="sub-type">{{field._options}}</span>
+    {% endif %}
+    {% if field._type == "object" %}
+    <input type="text" name="object-type" value="{{field._options}}"/>
+    {% endif %}
+    <textarea name="condition" placeholder="field:value">{% if field._condition %}{% for k,v in field._condition.items() -%}{% if isinstance(v, list) %}{{'%s:[%s]' % (k,','.join(v))}}{% else %}{{'%s:%s\n' % (k,v)}}{% endif %}{% endfor %}{% endif %}</textarea>
+    <span class="trigger del"></span>
+    {% if field._type in ["choice", "options"] %}
+    <textarea name="options" placeholder="ID,optFR,optAR" class="clearfloat">{% for k,v in field._options.items() -%}{{k ~ "," ~ v.fr ~ "," ~ v.ar ~ "\n"}}{% endfor %}</textarea>
+    {% endif %}
+</div>
+{% if field._type == "object" %}
+{{ printField(field) }}
+{% endif %}
+</div>
+{% endfor %}
+{% endmacro %}
