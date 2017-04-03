@@ -37,11 +37,11 @@ def index():
 	list_years_rsc = reversed(sorted(list(set(list_years_rsc))))
 
 	for year in list_years_bud:
-		bud_links.append({'year' : year , 'btype' : list(set([budget['type'] for budget in list_buds if 
+		bud_links.append({'year' : year , 'btype' : list(set([budget['type'] for budget in list_buds if
 budget['annee'] == year])) })
 
 	for year in list_years_rsc:
-		rsc_links.append({'year' : year ,'btype' : list(set([resource['type'] for resource in list_resrcs if 
+		rsc_links.append({'year' : year ,'btype' : list(set([resource['type'] for resource in list_resrcs if
 resource['year'] == year]))})
 
 	return render_template('index.html',
@@ -68,7 +68,6 @@ def budget_raw_view(year, budget_type):
 				obj['id'] = ministere['abbr']
 				obj['titre'] = ministere['nom_court']
 			yield obj
-	
 	return jsonify({'budgets': [x for x in mapper()]})
 
 def resources_raw_view(year , resource_type , lang):

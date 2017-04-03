@@ -91,6 +91,12 @@ root.add_url_rule('/article/add','new_article',views.new_articles, methods=['GET
 root.add_url_rule('/article/edit/<article_id>','edit_article',views.edit_articles, methods=['GET','POST'])
 root.add_url_rule('/article/delete/<article_id>','delete_article',views.delete_articles, methods=['GET','POST'])
 
+#budgets
+root.add_url_rule('/budgets/add' , 'new_budget' , views.add_budget , methods=['GET','POST'])
+#root.add_url_rule('/resources' , 'resources' , views.show_resources)
+#root.add_url_rule('/resources/edit/<resource_id>' , 'edit_resource' , views.edit_resource , methods=['GET','POST'])
+#root.add_url_rule('/resources/delete/<resource_id>', 'remove_resource',views.delete_resource)
+
 for rule,endpoint,view,opts in app.config.get('VIEWS', {}).values():
 	root.add_url_rule(rule, endpoint, view, **opts)
 

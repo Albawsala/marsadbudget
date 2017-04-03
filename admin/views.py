@@ -19,8 +19,9 @@ import re
 #abs
 import os
 import iso8601
-
-
+from pprint import pprint
+ALLOWED_EXTENSIONS = set(['xlsx'])
+UPLOAD_FOLDER = '/tmp/'
 def test():
 	return 'Hello World'
 
@@ -70,7 +71,7 @@ def del_collection(collection):
 	if request.method == 'POST':
 		if not check_csrf_token(request.form, _csrf_key):
 			raise BadRequest("Request check failed")
-		
+
 		try:
 			collections_.remove_collection(collection)
 			return redirect(url_for('admin.collections'))
@@ -144,7 +145,7 @@ def add_document(collection, doc_id):
 	if request.method == 'POST':
 		if not request.json and not check_csrf_token(request.json, _csrf_key):
 			raise BadRequest("Request check failed")
-		
+
 		try:
 			doc_new = request.json.get("doc")
 			is_draft = request.json.get("draft")
@@ -159,7 +160,7 @@ def add_document(collection, doc_id):
 				'edit_url': url_for('admin.edit_document', collection=collection, doc_id=doc_id),
 				'featured': u''.join(map(lambda getter: u'<span>%s</span>' % getter(doc_new), collections_.get_featured(col)[1])),
 			})
-		
+
 		except AssertionError as e:
 			return json.dumps({
 				"message": "<strong>Error: </strong>%s" % str(e),
@@ -172,7 +173,7 @@ def add_document(collection, doc_id):
 	doc = None
 	if doc_id:
 		doc = g.db.find_one(collection, {'_id': doc_id}) or abort(404)
-	
+
 	return render_template('document_add.html',
 		collection = col,
 		doc = doc,
@@ -201,7 +202,7 @@ def del_document(collection, doc_id):
 				raise BadRequest("Request check failed")
 			documents_.remove_document(collection, doc)
 			return redirect(url_for('admin.documents', collection=collection))
-		
+
 	if request.is_xhr:
 		return json.dumps({'csrf': generate_csrf_token(_csrf_key)})
 
@@ -225,7 +226,7 @@ def edit_document(collection, doc_id):
 			raise BadRequest("Access denied")
 		if not request.json and not check_csrf_token(request.json, _csrf_key):
 			raise BadRequest("Request check failed")
-		
+
 		try:
 			doc_new = request.json.get("doc")
 			is_draft = request.json.get("draft")
@@ -239,7 +240,7 @@ def edit_document(collection, doc_id):
 				'edit_url': url_for('admin.edit_document', collection=collection, doc_id=doc_id),
 				'featured': u''.join(map(lambda getter: u'<span>%s</span>' % getter(doc_new), collections_.get_featured(col)[1])),
 			})
-		
+
 		except AssertionError as err:
 			return json.dumps({
 				"message": "<strong>Error: </strong>%s" % str(err),
@@ -255,7 +256,7 @@ def edit_document(collection, doc_id):
 			break
 
 	documents_.touch_document(collection, doc_id)
-	
+
 	if request.is_xhr:
 		return json.dumps({
 			'csrf': generate_csrf_token(_csrf_key),
@@ -282,7 +283,7 @@ def touch_document(collection, doc_id):
 @editor_required
 def find_document(collection):
 	col = g.db.find_one('collections', {'_name': collection}) or abort(404)
-	
+
 	query = request.form.get('_query')
 	path = request.form.get('_path')
 	field = request.form.get(path)
@@ -342,7 +343,7 @@ def add_file():
 	if request.method == 'POST':
 		if not check_csrf_token(request.form, _csrf_key):
 			raise BadRequest("Request check failed")
-		
+
 		try:
 			fs = request.files.get("file")
 			type_ = request.form.get("type")
@@ -355,7 +356,7 @@ def add_file():
 				assert lang_ in ["fr","ar","en"], "missing on invalid lang"
 			elif type_ == "IMG":
 				assert "width" in request.form, "missing width"
-			
+
 			_id = files_.insert_file(request.form, fs)
 			is_iframe = request.args.get('iframe')
 			if is_iframe:
@@ -369,7 +370,7 @@ def add_file():
 
 		except AssertionError as err:
 			flash(err)
-	
+
 	return render_template('file_add.html',
 		csrf = generate_csrf_token(_csrf_key)
 	)
@@ -426,7 +427,7 @@ def edit_file(file_id):
 					featured = u'<span>%s</span><span>%s</span>' % (title_, file_['type']),
 				)
 			flash('File Updated Successfully!')
-		
+
 		except AssertionError as err:
 			flash(err)
 
@@ -496,9 +497,9 @@ def login():
 		return redirect(request.args.get('next') or '/')
 
 	_csrf_key = 'csrf_user_login'
-		
+
 	if request.method == 'POST':
-		
+
 		if not check_csrf_token(request.form, _csrf_key):
 			raise BadRequest("Request check failed")
 
@@ -508,17 +509,17 @@ def login():
 			remember = request.form.get('remember')
 			assert email, "missing email"
 			assert password, "missing password"
-		
+
 			user = get_user(email, password)
 			assert user, "wrong email or password"
-			
+
 			login_user(user, remember=remember)
 			flash("Logged in successfully.")
 			return redirect(request.args.get("next") or url_for('admin.index'))
-		
+
 		except AssertionError as err:
 			flash(err)
-	
+
 	return render_template("login.html",
 		csrf = generate_csrf_token(_csrf_key)
 	)
@@ -537,7 +538,7 @@ def register():
 			form_email = request.form.get('email')
 			form_password = request.form.get('password')
 			form_confirm = request.form.get('confirm')
-			
+
 			assert form_name, "missing name"
 			assert form_email, "missing email"
 			assert form_password, "missing password"
@@ -546,7 +547,7 @@ def register():
 			add_user(form_name, form_email, form_password)
 			flash("User Registred Successfully!")
 			return redirect(url_for('admin.index'))
-			
+
 		except AssertionError as err:
 			flash(err)
 
@@ -575,18 +576,18 @@ def profile():
 			form_email = request.form.get('email')
 			form_password = request.form.get('password')
 			form_confirm = request.form.get('confirm')
-		
+
 			assert form_name, "missing name"
 			assert form_email, "missing email"
 			assert form_password, "missing password"
 			assert form_password == form_confirm, "password confirm wrong"
-				
+
 			update_profile(current_user.data, form_name, form_email, form_password)
 			flash("Profile Updated Successfully!")
-			
+
 		except AssertionError as err:
 			flash(err)
-	
+
 	return render_template('profile.html',
 		csrf = generate_csrf_token(_csrf_key)
 	)
@@ -629,7 +630,7 @@ def user_edit(user_id):
 		try:
 			assert all(name in request.form for name in ["name", "email", "role", "collections"]), "form invalid"
 			assert request.form.get("role") in ['subscriber', 'editor', 'admin'], 'role field invalid'
-			
+
 			update_user(user, request.form)
 			flash('User Updated Successfully!')
 
@@ -648,31 +649,31 @@ def Project_XL_JSON(filename):
 	sheet_ar = wb.get_sheet_by_name(wb.get_sheet_names()[1]) # second sheet shoud be in arabic
 	for row_fr , row_ar in zip(sheet_fr.rows , sheet_ar.rows):
 	    projet = {
-	    'titre'         : { 'fr' : row_fr[0].value.encode('utf8') , 'ar' : 
+	    'titre'         : { 'fr' : row_fr[0].value.encode('utf8') , 'ar' :
 row_ar[0].value.encode('utf8')},
-	    'ministere'     : { 'fr' : row_fr[1].value.encode('utf8') , 'ar' : 
+	    'ministere'     : { 'fr' : row_fr[1].value.encode('utf8') , 'ar' :
 row_ar[1].value.encode('utf8')},
-	    'secteur'       : { 'fr' : row_fr[2].value.encode('utf8') , 'ar' : 
+	    'secteur'       : { 'fr' : row_fr[2].value.encode('utf8') , 'ar' :
 row_ar[2].value.encode('utf8')},
 	    'cout_prev'     : row_fr[3].value ,
 	    'cout_reel'     : row_fr[4].value ,
 	    'date_deb'      : row_fr[5].value ,
 	    'date_fin'      : row_fr[6].value ,
 	    'date_fin_reel' : row_fr[7].value ,
-	    'contexte'      : { 'fr' : row_fr[8].value.encode('utf8') , 'ar' : 
+	    'contexte'      : { 'fr' : row_fr[8].value.encode('utf8') , 'ar' :
 row_ar[8].value.encode('utf8')},
-	    'contenu'       : { 'fr' : row_fr[9].value.encode('utf8') , 'ar' : 
+	    'contenu'       : { 'fr' : row_fr[9].value.encode('utf8') , 'ar' :
 row_ar[9].value.encode('utf8')},
-	    'objectif'      : { 'fr' : row_fr[10].value.encode('utf8'), 'ar' : 
+	    'objectif'      : { 'fr' : row_fr[10].value.encode('utf8'), 'ar' :
 row_ar[10].value.encode('utf8')},
-	    'financement'   : { 'fr' : row_fr[11].value.encode('utf8'), 'ar' : 
+	    'financement'   : { 'fr' : row_fr[11].value.encode('utf8'), 'ar' :
 row_ar[11].value.encode('utf8')},
 	    'coord'         : { 'x'  : row_fr[12].value , 'y' : row_fr[13].value  },
-	    'delegation'    : { 'fr' : row_fr[14].value.encode('utf8'), 'ar' : 
+	    'delegation'    : { 'fr' : row_fr[14].value.encode('utf8'), 'ar' :
 row_ar[14].value.encode('utf8')},
-	    'municipalite'  : { 'fr' : row_fr[15].value.encode('utf8'), 'ar' : 
+	    'municipalite'  : { 'fr' : row_fr[15].value.encode('utf8'), 'ar' :
 row_ar[15].value.encode('utf8')},
-	    'gouvernorat'   : { 'fr' : row_fr[16].value.encode('utf8'), 'ar' : 
+	    'gouvernorat'   : { 'fr' : row_fr[16].value.encode('utf8'), 'ar' :
 row_ar[16].value.encode('utf8')},
 		'progress'		: row_fr[17].value ,
 	    }
@@ -695,19 +696,19 @@ def add_project():
 				if xl.filename[-4:] in ALLOWED_EXTENSIONS:
 					xl.save(UPLOAD_FOLDER+xl.filename)
 					for projet in Project_XL_JSON(UPLOAD_FOLDER+xl.filename):
-						if g.db.find("secteurs",{ 'nom.fr'  : 
+						if g.db.find("secteurs",{ 'nom.fr'  :
 projet['secteur']['fr']}).count() == 0:
-							g.db.insert('secteurs',{'nom' : { 'fr' : 
+							g.db.insert('secteurs',{'nom' : { 'fr' :
 projet['secteur']['fr'] , 'ar' : projet['secteur']['ar']}})
-						if g.db.find("financement",{ 'nom.fr'  : 
+						if g.db.find("financement",{ 'nom.fr'  :
 projet['secteur']['fr']}).count() == 0:
-							g.db.insert('financement',{'nom' : { 'fr' : 
+							g.db.insert('financement',{'nom' : { 'fr' :
 projet['financement']['fr'] , 'ar' : projet['financement']['ar']}})
-						if g.db.find("projects",{'titre.fr' : 
+						if g.db.find("projects",{'titre.fr' :
 projet['titre']['fr']}).count() == 0:
 							g.db.insert('projects',projet)
 						else:
-							g.db.update('projects', {'titre.fr' : 
+							g.db.update('projects', {'titre.fr' :
 projet['titre']['fr']} , projet)
 					remove(UPLOAD_FOLDER+xl.filename)
 				else:
@@ -731,32 +732,32 @@ def edit_project(project_id):
 		return render_template('edit_project.html' , project = project)
 	else:
 		edited_project = {
-	    'titre'         : { 'fr' : request.form.get('titre_fr') 	, 'ar' : 
+	    'titre'         : { 'fr' : request.form.get('titre_fr') 	, 'ar' :
 request.form.get('titre_ar')},
-	    'ministere'     : { 'fr' : request.form.get('minis_fr') 	, 'ar' : 
+	    'ministere'     : { 'fr' : request.form.get('minis_fr') 	, 'ar' :
 request.form.get('minis_ar')},
-	    'secteur'       : { 'fr' : request.form.get('secteur_fr') 	, 'ar' : 
+	    'secteur'       : { 'fr' : request.form.get('secteur_fr') 	, 'ar' :
 request.form.get('secteur_ar')},
 	    'cout_prev'     : request.form.get('cout_prev'),
 	    'cout_reel'     : request.form.get('cout_reel'),
 	    'date_deb'      : request.form.get('date_deb') ,
 	    'date_fin'      : request.form.get('date_fin') ,
 	    'date_fin_reel' : request.form.get('date_fin_reel'),
-	    'contexte'      : { 'fr' : request.form.get('contexte_fr') 	, 'ar' : 
+	    'contexte'      : { 'fr' : request.form.get('contexte_fr') 	, 'ar' :
 request.form.get('contexte_ar')},
-	    'contenu'       : { 'fr' : request.form.get('contenu_fr') 	, 'ar' : 
+	    'contenu'       : { 'fr' : request.form.get('contenu_fr') 	, 'ar' :
 request.form.get('contenu_ar')},
-	    'objectif'      : { 'fr' : request.form.get('objectif_fr') 	, 'ar' : 
+	    'objectif'      : { 'fr' : request.form.get('objectif_fr') 	, 'ar' :
 request.form.get('objectif_ar')},
-	    'financement'   : { 'fr' : request.form.get('financement_fr') ,'ar': 
+	    'financement'   : { 'fr' : request.form.get('financement_fr') ,'ar':
 request.form.get('financement_ar')},
-	    'coord'         : { 'x'  : request.form.get('coord_x') 		, 'y'  : 
+	    'coord'         : { 'x'  : request.form.get('coord_x') 		, 'y'  :
 request.form.get('coord_y')  },
-	    'delegation'    : { 'fr' : request.form.get('delegation_fr'), 'ar' : 
+	    'delegation'    : { 'fr' : request.form.get('delegation_fr'), 'ar' :
 request.form.get('delegation_ar')},
-	    'municipalite'  : { 'fr' : request.form.get('municipalite_fr'), 'ar' : 
+	    'municipalite'  : { 'fr' : request.form.get('municipalite_fr'), 'ar' :
 request.form.get('municipalite_ar')},
-	    'gouvernorat'   : { 'fr' : request.form.get('gov_fr')	, 'ar' : 
+	    'gouvernorat'   : { 'fr' : request.form.get('gov_fr')	, 'ar' :
 request.form.get('gov_ar')},
 		'progress'		: request.form.get('progress') ,
 	    }
@@ -821,8 +822,7 @@ def add_resources():
 					res['year'] = request.form.get('resource_year')
 					res['type'] = request.form.get('resource_type')
 					res['data'] = resources_to_json(UPLOAD_FOLDER+xl.filename)
-					if g.db.find('resources',{'year' : res['year'].__str__(), 'type' : res['type'] 
-}).count() == 0:
+					if g.db.find('resources',{'year' : res['year'].__str__(), 'type' : res['type']}).count() == 0:
 						g.db.insert('resources',res)
 					else:
 						g.db.update('resources',{'year' : res['year'], 'type' : res['type'] },res)
@@ -863,7 +863,7 @@ def show_articles():
 	articles = g.db.find('article',sort=[('date',-1)])
 	for post in articles:
 		post['contenu']['fr']=post['contenu']['fr'][0:150]
-		post['titre']['fr']=post['titre']['fr']		
+		post['titre']['fr']=post['titre']['fr']
 		article.append(post)
 	return render_template('article.html',articles = article)
 
@@ -882,7 +882,7 @@ def new_articles():
 				titre_ar = request.form.get('titre_ar'),
 				contenu_fr = request.form.get('contenu_fr'),
 				contenu_ar=request.form.get('contenu_ar'),)
-		
+
 		else:
 #			return str(iso8601.parse_date(str(datetime.now())))
 			request.files['image'].save(UPLOAD_FOLDER+request.files['image'].filename)
@@ -927,7 +927,7 @@ def edit_articles(article_id):
 			return render_template('edit_article.html',article=article, error = "modification avec succee")
 		elif request.files['image'].filename[-4:] not in ALLOWED_EXTENSIONS:
 			return render_template('edit_article.html',article=article, error = "type de fichier invalide (jpg,jpeg,png)")
-		
+
 		else:
 			request.files['image'].save(UPLOAD_FOLDER+request.files['image'].filename)
 			g.db.update('files',{'_id':article['image'].id},{'$set':{"filename" : request.files['image'].filename,"title" : request.files['image'].filename[:-4],"filesize" : os.stat(UPLOAD_FOLDER+request.files['image'].filename).st_size,}})
@@ -944,3 +944,111 @@ def delete_articles(article_id):
 	article = g.db.find_one("article" , {'_id' : article_id }) or abort(404)
         g.db.remove("article" , { '_id' : article["_id"] })
         return redirect(url_for('admin.articles'))
+
+def budget_to_json(filename):
+	To_return = []
+	tmp_dict = {}
+	wb = load_workbook(filename)
+	sheet = wb.get_sheet_by_name(wb.get_sheet_names()[0])
+	data = enumerate(list(sheet.rows)[2:])
+	for i,row in data:
+		if ( row[0].value and  row[1].value and row[2].value ) :
+			tmp_dict["ar"] = row[0].value
+			tmp_dict["fr"] = row[1].value
+			tmp_dict["total"] = row[2].value
+			print tmp_dict["total"]
+			tmp_dict["remunerations_publique"] =  row[3].value or 0
+			tmp_dict["moyens_des_services"] =  row[4].value or 0
+			tmp_dict["interventions_publiques"] =  row[5].value or 0
+			tmp_dict["disposition_urgence"] =  row[6].value or 0
+			tmp_dict["Avantages_dette_publique"] =  row[7].value or 0
+			tmp_dict["Investissements_direct"] =  row[9].value or 0
+			tmp_dict["financement_public"] =  row[10].value or 0
+			tmp_dict["Depenses_developpement_urgence"] =  row[11].value or 0
+			tmp_dict["ressources_exterieures_affectees"] =  row[12].value or 0
+			tmp_dict["Remboursement_dette_publique"] =  row[13].value or 0
+			tmp_dict["fonds_speciaux"] = row[15].value or 0
+			tmp_dict["gestion"] =  tmp_dict["moyens_des_services"]
+			tmp_dict["gestion"] +=  tmp_dict["interventions_publiques"]
+			tmp_dict["gestion"] +=  tmp_dict["remunerations_publique"]
+			tmp_dict["gestion"] +=  tmp_dict["disposition_urgence"]
+			tmp_dict["gestion"] +=  tmp_dict["Avantages_dette_publique"]
+			tmp_dict["developpement"] =  tmp_dict["Investissements_direct"]
+			tmp_dict["developpement"] +=  tmp_dict["financement_public"]
+			tmp_dict["developpement"] +=  tmp_dict["ressources_exterieures_affectees"]
+			tmp_dict["developpement"] +=  tmp_dict["Depenses_developpement_urgence"]
+			tmp_dict["developpement"] +=  tmp_dict["Remboursement_dette_publique"]
+
+			To_return.append(tmp_dict)
+			tmp_dict = {}
+	return To_return
+
+def link_budgets(budgets , year , budget_type):
+	linked_bugets = []
+	for budget in budgets:
+		obj = {}
+		ministere = g.db.find_one('ministeres' , {'nom.fr' : {'$regex' : budget['fr'] }})
+		obj['budget']	 = {}
+		obj['budget']['children'] = {}
+		obj['annee']	 = year
+		obj['type'] 	 = budget_type
+		if budget['developpement'] != 0:
+			obj['budget']['children']['developpement'] = {'montant' : budget['developpement'] / 1000.0 , children : []}
+			if budget['Investissements_direct'] != 0:
+				obj['budget']['children']['developpement']['children'].append({ 'ref' : 'Investissements_direct' , 'montant' : budget['Investissements_direct'] / 1000000.0})
+			if budget['financement_public'] != 0:
+				obj['budget']['children']['developpement']['children'].append({ 'ref' : 'financement_public' , 'montant' : budget['financement_public'] / 1000000.0})
+			if budget['ressources_exterieures_affectees'] != 0:
+				obj['budget']['children']['developpement']['children'].append({ 'ref' : 'ressources_exterieures_affectees' , 'montant' : budget['ressources_exterieures_affectees'] / 1000000.0})
+			if budget['Depenses_developpement_urgence'] != 0:
+				obj['budget']['children']['developpement']['children'].append({ 'ref' : 'Depenses_developpement_urgence' , 'montant' : budget['Depenses_developpement_urgence'] / 1000000.0})
+			if budget['Remboursement_dette_publique'] != 0:
+				obj['budget']['children']['developpement']['children'].append({ 'ref' : 'Remboursement_dette_publique' , 'montant' : budget['Remboursement_dette_publique'] / 1000000.0})
+		if budget['gestion'] != 0:
+			obj['budget']['children']['gestion'] = { 'montant' : budget['gestion'] / 1000.0  , children : []}
+			if budget['moyens_des_services'] != 0:
+				obj['budget']['children']['gestion']['children'].append({ 'ref' : 'moyens_des_services' , 'montant' : budget['moyens_des_services'] / 1000000.0 })
+			if budget['interventions_publiques'] != 0:
+				obj['budget']['children']['gestion']['children'].append({ 'ref' : 'interventions_publiques' , 'montant' : budget['interventions_publiques'] / 1000000.0 })
+			if budget['remunerations_publique'] != 0:
+				obj['budget']['children']['gestion']['children'].append({ 'ref' : 'remunerations_publique' , 'montant' : budget['remunerations_publique'] / 1000000.0 })
+			if budget['disposition_urgence'] != 0:
+				obj['budget']['children']['gestion']['children'].append({ 'ref' : 'disposition_urgence' , 'montant' : budget['disposition_urgence'] / 1000000.0 })
+			if budget['Avantages_dette_publique'] != 0:
+				obj['budget']['children']['gestion']['children'].append({ 'ref' : 'Avantages_dette_publique' , 'montant' : budget['Avantages_dette_publique'] / 1000000.0 })
+		if budget['fonds_speciaux'] != 0:
+			obj['budget']['children']['fonds_speciaux'] =  { 'montant' : budget['fonds_speciaux'] / 1000000.0 , children : [] }
+		if ministere != None:
+			obj['ministere'] = DBRef(collection='ministeres',id=ministere['_id'])
+		else:
+			obj['budget']['titre'] = { 'ar' : budget['ar'] , 'fr' : budget['fr']}
+			if budget['fr'] == "La Dette Publique":
+				obj['budget']['icon'] = 'icon_dette.png'
+				obj['budget']['id']	  = 'dette_publique'
+			else:
+				obj['budget']['id']   = budget['fr'].replace(' ','_')
+		g.db.insert('budgets',obj)
+
+
+@login_required
+@editor_required
+def add_budget():
+	if request.method == 'POST':
+		if 'budget_XL' not in request.files:
+			return render_template('add_budget.html',error ='please select a file')
+		elif request.form.get('budget_year') == '':
+			return render_template('add_budget.html',error ='please type in the year')
+		elif request.form.get('budget_type') not in ['LF' , 'LFC']:
+			return render_template('add_budget.html',error ='please select a valid type ( LF or LFC)')
+		else:
+			xl = request.files['budget_XL']
+			if xl.filename == '':
+				return render_template('add_budget.html',error ='select a file please')
+			else:
+				if xl.filename[-4:] in ALLOWED_EXTENSIONS:
+					xl.save(UPLOAD_FOLDER+xl.filename)
+					link_budgets( budget_to_json(UPLOAD_FOLDER+xl.filename) , request.form.get('budget_year') , request.form.get('budget_type'))
+					return redirect(url_for('admin.collections'))
+				else:
+					return render_template('add_budget.html',error ='select a valid file please')
+	return render_template('add_budget.html')
