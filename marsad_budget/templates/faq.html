@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style type="text/css">
+#faq{
+	width: 760px;
+}
+
+h1{
+	margin: 0;
+	padding: 70px 50px 0px;
+	background-color: white;
+	font-size: 2.4em;
+	font-weight: bold;
+	color: #000000;
+}
+
+h2{
+	margin: 0;
+	padding: 0px 50px 30px;
+        background-color: white;
+        font-size: 2em;
+        font-weight: bold;
+        color: #fc6a59;
+}
+
+h3{
+	margin: 0;
+        padding: 0px 70px 30px;
+        background-color: white;
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #000ff;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<div id="faq">
+<h1>
+	{% if g.lang_code == "ar" %}أسئلة يتكرر طرحها
+	{% else %}Question fréquemment posé
+	{% endif %}
+<h1>
+
+{% for faq in faqs %}
+<h2>{{ faq.num_question }}-{{ faq.question|lang }}</h2>
+<h3>{{ faq.reponse|lang }}</h3>
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block meta %}
+<title>{% trans %}Recherche{% endtrans %}</title>
+{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/static/css/search.css">
+<script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+{% endblock %}
+
+
+{% block main %}
+<div class="panel panel-primary">
+  <div class="panel-heading">{% trans %}résultats{% endtrans %} : {{keyword}}</div>
+  <div class="panel-body">
+    <div id="exTab1" class="container">
+      <div class="alert alert-warning">
+      <ul  class="nav nav-pills nav-justified">
+        <li class="active">
+          <a href="#1a" data-toggle="tab">{% trans %}structures{% endtrans %}&nbsp;<span 
+class="badge">{{results.ministeres.count()}}</span></a>
+        </li>
+        <li>
+          <a  href="#2a" data-toggle="tab">{% trans %}WIKI{% endtrans %}&nbsp;<span class="badge">{{results.wiki.count()}}</span></a>
+        </li>
+        <li>
+          <a href="#3a" data-toggle="tab">{% trans %}informations{% endtrans %}&nbsp;<span class="badge">{{results.pages.count()}}</span></a>
+        </li>
+        <li>
+          <a href="#4a" data-toggle="tab">{% trans %}articles{% endtrans %}&nbsp;<span class="badge">{{results.articles.count()}}</span></a>
+        </li>
+      </ul>
+    </div>
+      <hr>
+      <div class="tab-content clearfix">
+        <br>
+        <div class="tab-pane" id="2a">
+          {% for wk in results.wiki %}
+          <div class="well">{{  wk.texte | remove_html | highlight(keyword) | safe }}</div>
+          <hr>
+          {% endfor %}
+        </div>
+        <div class="tab-pane active"  id="1a">
+          {% for minis in results.ministeres %}
+          <a href="{{url_for('root.ministere', ministere_id=minis.abbr)}}">
+          <div class="alert alert-info" style="width:50%;">
+            {{ minis.nom | lang | highlight(keyword , False) | safe }}
+          </div>
+          </a>
+          <hr>
+          {% endfor %}
+        </div>
+        <div class="tab-pane" id="3a">
+          {% for page in results.pages %}
+          <div class="well">
+          {% if page.titre | lang %}
+            <div class="alert alert-info">{{page.titre | lang | highlight(keyword) | safe }}</div>
+          {% endif %}
+          {{ page.texte | lang | remove_html | summerize | highlight(keyword , True) | safe }}</div>
+          <hr>
+          {% endfor %}
+        </div>
+        <div class="tab-pane" id="4a">
+          {% for article in results.articles %} 
+          <div class="well">
+            <div class="alert alert-info"><a href="{{url_for('root.article',article_id=article._id)}}"> {{article.titre | lang | highlight(keyword) | safe }} </a></div>
+           {{ article.contenu | lang | remove_html | summerize | highlight(keyword , True) | safe }}</div> 
+          <hr>
+         {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-footer"></div>
+</div>
+  {% endblock %}

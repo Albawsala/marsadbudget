@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" lang="{{g.lang_code}}">
+	
+	<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# almarsad: http://ogp.me/ns/fb/almarsad#">
+	{% block meta %}
+    		<title>{{post.titre|lang}}</title>
+    	{% endblock %}
+    	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    	<meta property="og:url" content="{{url_for(request.endpoint, _external=True, **request.view_args)}}" />
+    	<meta property="og:site_name" content="Marsad" />
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  	<script>
+		$("document").ready(function(){
+			var url =$(location).attr('href');	
+			$("#btn-partage").html('<iframe id="partage-fb" src="https://www.facebook.com/plugins/share_button.php?href='+encodeURIComponent(url)+'&layout=box_count&size=small&mobile_iframe=true&appId=1430676967240081&width=72&height=40" width="72" height="40" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe>');	
+	});
+	</script>
+
+    	<script src="/static/bootstrap-tooltip.js"></script>
+    	<script src="/static/bootstrap-popover.js"></script>
+	
+      	   
+        <meta charset="utf-8" />
+	<link rel="stylesheet" href="/static/actualite/css/style.css" />
+		<link rel="stylesheet" href="/static/actualite/css/nivo-slider.css" type="text/css" media="screen" />
+		<link rel="stylesheet" href="/static/actualite/css/default/default.css" type="text/css" media="screen" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+		<script src="jquery.nivo.slider.pack.js" type="text/javascript"></script>
+        <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        
+    </head>
+	<body style="color: white;min-height:600px;opacity:1" class="{{g.lang_code}}"  data-url="{{request.path}}" id="blog" data-endpoint="{{request.endpoint[5:]}}" data-args="{{request.view_args|tojson|safe}}">
+	
+	
+		<div id="header" style="height:120px;background-color:transparent;position:absolute;box-shadow: 0 0px 0px 0 ">
+        		<a id="logo" href="{{url_for('root.home')}}" >
+            			<span class="word-marsad" style="font-size:1.2em">{% trans %}MARSAD{% endtrans %}</span>
+            			<span class="word-dot">.</span>
+            			<span class="word-budget" style="font-size:1.4em" >{% trans %}budget{% endtrans %}</span>
+       			 </a>
+	        	<div class="floati" style="font-color:white">
+        			<a id="page-fb" href="https://www.facebook.com/AlBawsala" target="_blank" style="color:#fc6a59"></a>
+            			<a id="page-tw" href="https://twitter.com/AlBawsalaTN" target="_blank"></a>
+            			{% if g.lang_code == "ar" %}
+            			<a id="lang" class="lang-fr" href="{{ url_for(request.endpoint, lang_code='fr', **request.view_args) }}" style="">Français</a>
+            			{% else %}
+		      		<a id="lang" class="lang-ar" href="{{ url_for(request.endpoint, lang_code='ar', **request.view_args) }}" style="font-size:1.4em">عربي</a>
+            			{% endif %}
+        		</div>
+        		<a href="{{url_for('root.actualite')}}" ><h1 align="center" style="color:#c44d3d; font-size:5em; margin-top:-10px"> Budget Bloging </h1></a>
+
+   		</div>
+</br></br>
+
+		<div id="wrapper">	
+			<!--__--__--__--__--  M A I N   C O N T E N T  --__--__--__--___--__--__-->
+			<section>
+				<!--__--__--__--__--  A R T I C L E  --__--__--__--___--__--__-->
+				{% if g.lang_code== "ar" %}
+				<article id="singlepost" style="width:60%; margin-left:5%; border:none">
+				{% else %}
+				<article id="singlepost" style="width:60%; margin-right:5%; border:none">
+				{% endif %}
+					<a href="{{url_for('root.article',article_id=post._id)}}"><h1>{{post.titre|lang}}</h1></a>
+					<h2 style="color: white;">{% trans %}Publier par{% endtrans %} :<a href="{{url_for('root.home')}}">{% trans %}equipe AlBawsala Budget le{% endtrans %}</a>{{ post.date | datetimeformat("d MMMM y") }}</h2>
+					<img src="/uploads/images/{{image_article.filename}}" alt="" />
+					<h3 style="font-size:1.3m">{{post.contenu|lang|safe}} </h3>
+					<a>{{post.partage}}</a>
+					
+					<div id="btn-partage"></div>
+					
+					<a id="twitter-btn"href="https://twitter.com/share" class="twitter-share-button" data-url="" data-via="AlBawsalaTN" data-size="large" data-hashtags="marsadBudget,budgetBloging" onload="twiter_partage()">Tweet</a>
+					<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+				</article>
+				<!--__--__--__--  S I D E B A R --__--__--__--__-->	
+				{% if g.lang_code == "fr" %}
+				<div id="sidebar" style="margin-top:-10x;margin-left:-5px;width:35%;color:#c44d3d;font-family: 'Vollkorn', serif;">
+				{% else %}
+				<div id="sidebar" style="margin-top:-10x;margin-left:-90px;width:40%;color:#c44d3d;">
+				{% endif %}
+						<!--__--__--__--  les articles récents --__--__--__--__-->	
+					<aside style="width:100%;">
+						<h1 class="articlsidebar">{% trans %}Articles récents{% endtrans %}</h1>
+						{% if g.lang_code == "fr" %}
+						<div style="margin-top:10px;margin-left:20px">
+						{% else %}
+						<div style="margin-top:10px;margin-right:40px">
+						{% endif %}
+
+						<ul>
+							{% for post in g.db.find('article',sort=[('date',-1)]).limit(5) %}
+							<li  style="font-size:14px;font-weight:normal"><a href="{{url_for('root.article',article_id=post._id)}}">{{post.titre|lang}}</a></li>
+							{% endfor %}		
+						</ul>
+						</div>
+					</aside>
+
+						<!--__--__--__--  les articles les plus visités --__--__--__--__-->
+					<aside style="width:100%;">
+						<h1 class="articlsidebar">{% trans %}Articles les plus lus{% endtrans %}</h1>
+						{% if g.lang_code == "fr" %}
+						<div style="margin-top:10px;margin-left:20px">
+						{% else %}
+						<div style="margin-top:10px;margin-right:40px">
+						{% endif %}
+
+						<ul>
+							
+							{% for post in g.db.find('article',sort=[('vue',-1)]).limit(5) %}
+							<li style="font-size:14px;font-weight:normal"><a href="{{url_for('root.article',article_id=post._id)}}">{{post.titre|lang}}</a></li>
+							{% endfor %}
+						</ul>
+						</div>
+					</aside>
+				</div>
+			</section>
+			<!--__--__--__--__--  T H E    F O O T E R --__--__--__--___--__--__--__-->
+			<footer>	
+				{% if g.lang_code == "ar" %}
+					<div style="margin:0px 20px 0px 10px	" >
+				{% else %}
+					<div style="margin:0px 10px 0px 10px" >
+				{% endif %}
+					<strong style="width:20%">{% trans %}Marsad{% endtrans %}:</strong></br>
+            				<a style="width:20%" href="{{url_for('root.page', page_id='about')}}">{% trans %}Qui sommes nous{% endtrans %}</a>
+            				<a style="width:20%" href="{{url_for('root.wiki')}}">{% trans %}Glossaire{% endtrans %}</a>
+					<a style="width:20%" href="{{url_for('root.faq')}}">{% trans %}FAQ{% endtrans %}</a>
+        				</div>
+				
+			</footer>
+		</div>			
+	</body>
+</html>

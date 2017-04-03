@@ -1,0 +1,390 @@
+.ar #ministeres{
+    left: auto;
+    right: 0px;
+    box-shadow: 1px 0 3px rgba(0,0,0,0.2);
+}
+#ministeres{
+    position: fixed;
+    z-index: 2;
+    width: 50px;
+    min-height: 100%;
+    left: 0px;
+    top: 0px;
+    padding-top: 50px;
+    overflow: hidden;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    background-color: #53545d;
+    box-shadow: -1px 0 3px rgba(0,0,0,0.2);
+    transition: width 250ms;
+    -webkit-transition: width 250ms;
+}
+body.ministeres-expand #ministeres{
+    width: 230px;
+}
+#ministeres:hover > a > .ministere-titre{
+    display: inline-block;
+}
+.ar #ministeres > a{
+    padding: 16px 48px 16px 18px;
+    background-position: right 15px center;
+}
+#ministeres > a{
+    display: block;
+    color: white;
+    border-top: none;
+    height: 18px;
+    opacity: 0.5;
+    border-top: 1px solid #444;
+    padding: 16px 18px 16px 48px;
+    background-repeat: no-repeat;
+    background-position: left 15px center;
+}
+#ministeres > a.ministère_anc{          background-image: url('/static/images/ministere_anc_white.png'); }
+#ministeres > a.ministère_arp{          background-image: url('/static/images/ministere_arp_white.png'); }
+#ministeres > a.ministère_presidence{   background-image: url('/static/images/ministere_presidence_white.png'); }
+#ministeres > a.ministère_gouvernement{ background-image: url('/static/images/ministere_gouvernement_white.png'); }
+#ministeres > a.ministère_defense{      background-image: url('/static/images/ministere_defense_white.png'); }
+#ministeres > a.ministère_interieur{    background-image: url('/static/images/ministere_interieur_white.png'); }
+#ministeres > a.ministère_justice{      background-image: url('/static/images/ministere_justice_white.png'); }
+#ministeres > a.ministère_finances{     background-image: url('/static/images/ministere_finances_white.png'); }
+#ministeres > a.ministère_agriculture{  background-image: url('/static/images/ministere_agriculture_white.png'); }
+#ministeres > a.ministère_industrie{    background-image: url('/static/images/ministere_industrie_white.png'); }
+#ministeres > a.ministère_tourisme{     background-image: url('/static/images/ministere_tourisme_white.png'); }
+#ministeres > a.ministère_transport{    background-image: url('/static/images/ministere_transport_white.png'); }
+#ministeres > a.ministère_culture{      background-image: url('/static/images/ministere_culture_white.png'); }
+#ministeres > a.ministère_sante{        background-image: url('/static/images/ministere_sante_white.png'); }
+#ministeres > a.ministère_emploi{       background-image: url('/static/images/ministere_emploi_white.png'); }
+#ministeres > a.ministère_education{    background-image: url('/static/images/ministere_education_white.png'); }
+#ministeres > a.ministère_droits_de_lhomme{     background-image: url('/static/images/ministere_droits_de_lhomme_white.png'); }
+#ministeres > a.ministère_domaines_de_letat{    background-image: url('/static/images/ministere_domaines_de_letat_white.png'); }
+#ministeres > a.ministère_tic_communication{    background-image: url('/static/images/ministere_tic_communication_white.png'); }
+#ministeres > a.ministère_femme_famille{        background-image: url('/static/images/ministere_femme_famille_white.png'); }
+#ministeres > a.ministère_affaires_sociales{    background-image: url('/static/images/ministere_affaires_sociales_white.png'); }
+#ministeres > a.ministère_jeunesse_sports{      background-image: url('/static/images/ministere_jeunesse_sports_white.png'); }
+#ministeres > a.ministère_affaires_etrangeres{        background-image: url('/static/images/ministere_affaires_etrangeres_white.png'); }
+#ministeres > a.ministère_commerce_artisanat{         background-image: url('/static/images/ministere_commerce_artisanat_white.png'); }
+#ministeres > a.ministère_affaires_religieuses{       background-image: url('/static/images/ministere_affaires_religieuses_white.png'); }
+#ministeres > a.ministère_enseignement_superieur{     background-image: url('/static/images/ministere_enseignement_superieur_white.png'); }
+#ministeres > a.ministère_equipement_environnement{   background-image: url('/static/images/ministere_equipement_environnement_white.png'); }
+#ministeres > a.ministère_justice_droits_de_lhomme{   background-image: url('/static/images/ministere_justice_droits_de_lhomme_white.png'); }
+#ministeres > a.ministère_jeunesse_sports_femme_famille{      background-image: url('/static/images/ministere_jeunesse_sports_femme_famille_white.png'); }
+#ministeres > a.ministère_developpement_cooperation_internationale{ background-image: url('/static/images/ministere_developpement_cooperation_internationale_white.png'); }
+#ministeres > a.ministère_enseignement_superieur_tic_communication{ background-image: url('/static/images/ministere_enseignement_superieur_tic_communication_white.png'); }
+
+#ministeres > a.ministère_anc:hover,
+#ministeres > a.ministère_presidence:hover,
+#ministeres > a.ministère_gouvernement:hover,
+#ministeres > a:hover{
+    opacity: 1;
+    text-decoration: none;
+    border-top: 1px solid #4f4f58;
+    background-color: #f76c54;
+    color: white;
+}
+#ministeres > a.active{
+    background-color: #f76c54;
+    color: white;
+    opacity: 1;
+}
+#ministeres > a > .ministere-titre{
+    display: none;
+    width: 180px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+#ministeres > a > svg{
+    width: 18px;
+    height: 18px;
+}
+#ministeres > a:hover > svg{
+    opacity: 0.8;
+}
+#ministeres > a > svg > circle{
+     fill: none;
+     stroke: #808080;
+     stroke-width: 4px;
+}
+#ministeres > a:hover > svg > circle{
+    stroke: #53545d;
+}
+#ministeres > a > svg > path{
+    fill: none;
+    stroke: white;
+    stroke-width: 4px;
+}
+#map-container{
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    width: 150px;
+    height: 100%;
+}
+#map{
+    width: 100%;
+    height: 100%;
+    background-color: #ddd;
+}
+#ministere-margin > div{
+    background-color: white;
+    padding: 25px;
+    margin: 10px 5px;
+    width: 300px;
+}
+#ministere-data > a{
+    display: block;
+    border-top: 1px solid #f3f3f3;
+    color: #444;
+    padding: 5px 0;
+}
+#ministere-data > a:hover{
+    background-color: #f5f5f5;
+    text-decoration: none;
+}
+#budget-popup{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255,255,255,0.95);
+    top: 0;
+    left: 0;
+    z-index: 15;
+    display: none;
+}
+.ar #budget-popup-container{
+    margin: 80px 100px 30px 50px;
+}
+#budget-popup-container{
+    margin: 80px 50px 30px 100px;
+}
+#budget-popup-header > div{
+    display: inline-block;
+    vertical-align: bottom;
+}
+#budget-popup-close{
+    margin: 20px 0;
+    width: 32px;
+    height: 32px;
+    background-image: url('/static/images/popup_close.png');
+}
+.popup-yeargroup{
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0px 9px;
+}
+.popup-yeargroup-year{
+    text-align: center;
+    color: #999;
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 1px;
+}
+.popup-yeargroup-bar{
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 0 3px 0 0;
+}
+.popup-yeargroup-bar > div{
+    background-color: #cbe4ce;
+    width: 12px;
+    margin: 3px 0;
+}
+.popup-yeargroup-bar:last-child > div{
+    background-color: #aed8e5;
+}
+.popup-yeargroup-bar.active:last-child > div,
+.popup-yeargroup-bar.active > div{
+    background-color: #C84C41;
+}
+.ar #budget-popup-labels{
+    margin: 0 150px 0 0;
+}
+#budget-popup-labels{
+    margin: 0 0 0 150px;
+}
+#budget-popup-labels > div{
+    display: inline-block;
+    vertical-align: bottom;
+    margin: 2px 20px;
+}
+#budget-popup-labels > .budget-label:first-child{
+    width: 170px;
+}
+#budget-popup-labels > div > .budget-label-value,
+#budget-popup-labels > div > .budget-label-evolution{
+    font-family: 'Open Sans';
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: #555;
+}
+#budget-popup-labels > div > .grey{
+    color: #aaa;
+}
+#budget-popup-labels .budget-label-evolution{
+    width: 250px;
+}
+#budget-popup-labels .budget-label-evolution-sign{
+    width: 36px;
+    height: 42px;
+    margin: -2px 10px 0;
+}
+#budget-popup-labels .budget-label-evolution-sign.positive{
+    background-image: url('/static/images/budget_evolution_positive.png');
+}
+#budget-popup-labels .budget-label-evolution-sign.negative{
+    background-image: url('/static/images/budget_evolution_negative.png');
+}
+#budget-popup-labels .budget-label-evolution-sign.null{
+    background-image: url('/static/images/budget_evolution_null.png');
+}
+
+#budget-popup-main{
+    margin: 70px 65px;
+}
+#budget-popup-main > div{
+    display: inline-block;
+    vertical-align: top;
+}
+#budget-popup-main .bar{
+    margin: 18px 0;
+    position: relative;
+}
+#budget-popup-main .bar .bar-paint{
+    opacity: 1;
+    width: 70px;
+    position: static;
+}
+#budget-popup-main .childbars .bar .bar-paint{
+    opacity: 1;
+}
+.ar #budget-popup-main .childbars{
+    left: auto;
+    right: 200px;
+}
+#budget-popup-main .childbars{
+    position: absolute;
+    left: 200px;
+    top: 0;
+}
+.ar #budget-popup-main svg{
+    left: auto;
+    right: 70px;
+}
+#budget-popup-main svg{
+    width: 130px;
+    height: 500px;
+    position: absolute;
+    top: 0;
+    left: 70px;
+}
+.ar #budget-popup-main path{
+    -webkit-transform: translate(130px,0) scale(-1,1);
+    -ms-transform: translate(130px,0) scale(-1,1);
+    transform: translate(130px,0) scale(-1,1);
+}
+#budget-popup-main path{
+    fill: none;
+    opacity: 0.5;
+}
+#budget-popup-main .bar.gestion path{ stroke: #aed8e5; }
+#budget-popup-main .bar.developpement path{ stroke: #cbe4ce; }
+#budget-popup-main .bar.fonds_speciaux path{ stroke: #fddddf; }
+
+#budget-popup-main .bar.gestion .bar-paint{ background-color: #aed8e5; }
+#budget-popup-main .bar.developpement .bar-paint{ background-color: #cbe4ce; }
+#budget-popup-main .bar.fonds_speciaux .bar-paint{ background-color: #fddddf; }
+#budget-popup-main .bar > .bar-label{
+    position: absolute;
+    color: #444;
+    width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#budget-popup-main .bar > .bar-value{
+    position: absolute;
+    width: 60px;
+    color: #888;
+    font-size: 11px;
+}
+.ar #budget-popup-main .childbars > .bar > .bar-value{
+    left: auto;
+    right: 80px;
+    text-align: right;
+}
+#budget-popup-main .childbars > .bar > .bar-value{
+    left: 80px;
+    text-align: left;
+}
+.ar #budget-popup-main .bar > .bar-value{
+    right: auto;
+    left: 80px;
+    text-align: left;
+}
+#budget-popup-main .bar > .bar-value{
+    right: 80px;
+    text-align: right;
+}
+.ar #budget-popup-main > .budget-level-1.gbo{
+    margin: 0 240px 0 100px;
+}
+.ar #budget-popup-main > .budget-level-1{
+    margin: 0 310px 0 100px;
+}
+#budget-popup-main > .budget-level-1.gbo{
+    margin: 0 100px 0 240px;
+}
+#budget-popup-main > .budget-level-1{
+    margin: 0 100px 0 310px;
+}
+#budget-popup-main .bar > .bar-label{
+    line-height: 20px;
+}
+.ar #budget-popup-main .bar > .bar-label{
+    left: auto;
+    right: -370px;
+    text-align: left;
+}
+#budget-popup-main .bar > .bar-label{
+    left: -370px;
+    text-align: right;
+}
+.ar #budget-popup-main .childbars > .bar > .bar-label{
+    left: auto;
+    right: 140px;
+    text-align: right;
+}
+#budget-popup-main .childbars > .bar > .bar-label{
+    left: 140px;
+    text-align: left;
+}
+#ministere-menu{
+    height: 72px;
+}
+#ministere-menu > a{
+    font-weight: bold;
+    padding: 15px 18px;
+    line-height: 20px;
+}
+#ministere-menu > a.active,
+#ministere-menu > a:hover{
+    background-color: #f26e4e;
+    color: white;
+    text-decoration: none;
+}
+/*
+#ministere-menu > [data-tab="ministere-budget"]{ background-image: url('/static/images/menu_budget_grey.png'); }
+#ministere-menu > [data-tab="ministere-programmes"]{ background-image: url('/static/images/menu_programmes_grey.png'); }
+#ministere-menu > [data-tab="ministere-ressources"]{ background-image: url('/static/images/menu_rh_grey.png'); }
+
+#ministere-menu > [data-tab="ministere-budget"]:hover,
+#ministere-menu > [data-tab="ministere-budget"].active
+{ background-image: url('/static/images/menu_budget_white.png'); }
+#ministere-menu > [data-tab="ministere-programmes"]:hover,
+#ministere-menu > [data-tab="ministere-programmes"].active
+{ background-image: url('/static/images/menu_programmes_white.png'); }
+#ministere-menu > [data-tab="ministere-ressources"]:hover,
+#ministere-menu > [data-tab="ministere-ressources"].active
+{ background-image: url('/static/images/menu_rh_white.png'); }
+*/

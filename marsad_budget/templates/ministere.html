@@ -1,0 +1,603 @@
+{% extends "base.html" %}
+
+{% block meta %}
+<title>{{ministere.nom|lang}}</title>
+{% endblock %}
+
+{% block head %}
+<script type="text/javascript">
+var budgets = {{budgets|tojson|safe}};
+var budget_labels = {{budget_labels.data|tojson|safe}};
+{% if ministere.contours and ministere.contours.geojson %}
+var ministere_coords = {{ministere.contours.coords|tojson|safe}};
+var ministere_geojson = {{ministere.contours.geojson|safe}};
+{% else %}
+var ministere_coords;
+{% endif %}
+</script>
+<script type="text/javascript" src="/static/budget_ministere.10.js"></script>
+<script type="text/javascript" src="/static/ministere.10.js"></script>
+<style type="text/css">
+#main{
+	height: 100%;
+	margin-top: 0; 
+}
+#cols{
+	width: 100%;
+	height: 100%;
+	padding-top: 52px; 
+}
+#col-1{
+	width: 500px;
+	background-color: white;
+}
+h1{
+	font-size: 18px;
+	line-height: 1.4em;
+	margin: 0;
+	padding: 0;
+}
+#menu{
+	margin: 12px 0 40px;
+}
+#menu > a{
+	color: #444;
+	font-size: 13px;
+	font-family: 'Open Sans';
+	font-weight: 600;
+}
+.ar #menu > a{
+	font-family: 'FrutigerLT';
+	font-weight: 400;
+}
+#menu > a:hover,
+#menu > a.active{
+	text-decoration: none;
+	color: #F26E4E;
+}
+#years{
+	margin: 0px 30px;
+	font-weight: bold;
+}
+#years > a{
+	display: inline-block;
+	opacity: 0.5;
+	padding: 0 4px;
+	text-decoration: none;
+}
+#years > a.active,
+#years > a:hover{
+	opacity: 1;
+}
+#budget-legend-1 > div > span{
+	display: inline-block;
+	vertical-align: top;
+	width: 25px;
+}
+#budget-legend > div{
+	display: none;
+}
+#budget-legend > div > *{
+	display: inline-block;
+}
+#budget-legend > div > i{
+	width: 10px;
+	height: 10px;
+}
+.bar{
+	position: relative;
+	margin: 20px 0;
+}
+.root{
+	width: 500px;
+	margin: 140px auto 0;
+}
+.root > .bar{
+	margin: 12px 0;
+}
+.bar-paint{
+	background-color: rgba(0,0,0,0.2);
+	width: 70px;
+	height: 100%;
+	position: absolute;
+	z-index: 2;
+	top: 0;
+	opacity: 0.7;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.bar-label{
+	position: absolute;
+	z-index: 2;
+	top: 0px;
+	line-height: 20px;
+	user-select: none;
+	-webkit-user-select: none;
+	cursor: default;
+	white-space: nowrap;
+}
+.bar.transparent > .bar-label,
+.bar.open > .bar-label{
+	width: 240px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.bar-label-value{
+	font-size: 11px;
+	display: inline-block;
+	width: 70px;
+	text-align: center;
+	margin-right: 10px;
+	color: #888;
+}
+.bar-label-titre{
+	font-size: 12px;
+	font-weight: bold;
+	color: #555;
+}
+.bar > .childbars > .bar:first-of-type{
+	margin-top: 0!important;
+}
+.yeargroup{
+	display: inline-block;
+	vertical-align: bottom;
+	margin-right: 36px;
+}
+.ar .yeargroup{
+	margin-right: 0px;
+	margin-left: 36px;
+}
+.yeargroup-year{
+	text-align: center;
+	color: #999;
+	font-size: 11px;
+	font-weight: bold;
+	margin-top: 1px;
+}
+.yeargroup-bar{
+	display: inline-block;
+	vertical-align: bottom;
+	margin: 0 3px 0 0;
+	opacity: 0.8;
+}
+.yeargroup-bar:hover{
+	opacity: 1;
+	text-decoration: none;
+}
+.yeargroup-bar-label{
+	text-align: center;
+	color: #888;
+	font-size: 10px;
+}
+.yeargroup-bar-section{
+	width: 30px;
+	margin: 3px 0;
+}
+.yeargroup-bar-section:hover{
+	background-color: #7ea0a8;
+}
+#budget-legend > .developpement > i,
+.yeargroup-bar > .developpement{
+	background-color: #cbe4ce;
+}
+#budget-legend > .fonds_speciaux > i,
+.yeargroup-bar > .fonds_speciaux{
+	background-color: #fddddf;
+}
+#budget-legend > .gestion > i,
+.yeargroup-bar > .gestion{
+	background-color: #aed8e5;
+}
+/*
+#evolution-axis > div{
+	display: inline-block;
+	width: 70px;
+	margin: 4px;
+	text-align: center;
+}
+*/
+.titre{
+	font-weight: bold;
+	color: #555;
+}
+.budget-label-details-description{
+	color: #888;
+}
+sup{
+	vertical-align: top;
+	color: #888;
+}
+sub{
+	vertical-align: middle;
+	color: #888;
+}
+.evolution-evolution{
+	display: inline-block;
+	vertical-align: middle;
+}
+.evolution-evolution > div{
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 10px;
+}
+.evolution-evolution-label{
+	color: olive;
+	width: 50px;
+}
+.evolution-evolution-bar{
+	width: 30px;
+	background-color: olive;
+	opacity: 0.8;
+}
+.evolution-evolution.direction .evolution-evolution-bar{
+	background-color: tomato;
+}
+.evolution-evolution.direction .evolution-evolution-label{
+	color: tomato;
+}
+.grey{
+	color: #888;
+}
+#ministere-agents ul{
+	margin: 7px 0;
+	padding: 0 0 0 10px;
+}
+#ministere-agents ul ul{
+	opacity: 0.7;
+}
+.ar #ministere-agents ul{
+	padding: 0 10px 0 0;
+}
+#ministere-agents li{
+	margin: 5px 0;
+}
+#ministere-agents li li{
+	margin: 3px 0;
+}
+#ministere-organigramme ul > li > ul,
+#ministere-organigramme ul > li > div{
+	display: inline-block;
+	vertical-align: middle;
+}
+#ministere-organigramme li{
+	margin-bottom: 10px;
+	display: block;
+	position: relative;
+}
+#ministere-organigramme > ul > li{
+	margin: 30px 0;
+}
+#ministere-organigramme ul{
+	padding: 0;
+	margin: 0;
+}
+#ministere-organigramme > ul > li > div{
+	width: 120px;
+	position: relative;
+}
+.ar #ministere-organigramme > ul > li.parent > div::before{
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: auto;
+	margin-left: -40px;
+	height: 2px;
+	width: 40px;
+	background-color: #ddd;
+}
+#ministere-organigramme > ul > li.parent > div::before{
+	content: '';
+	position: absolute;
+	top: 50%;
+	right: 0;
+	margin-right: -40px;
+	height: 2px;
+	width: 40px;
+	background-color: #ddd;
+}
+.ar #ministere-organigramme ul ul > li:first-child > span{
+	margin-left: 0px;
+	margin-right: -40px;
+}
+#ministere-organigramme ul ul > li:first-child > span{
+	display: block;
+	position: absolute;
+	background-color: white;
+	width: 40px;
+	height: 50%;
+	margin-left: -40px;
+}
+.ar #ministere-organigramme ul ul > li:last-child > span{
+	margin-left: 0px;
+	margin-right: -40px;
+}
+#ministere-organigramme ul ul > li:last-child > span{
+	display: block;
+	position: absolute;
+	background-color: white;
+	width: 40px;
+	height: 50%;
+	margin-left: -40px;
+	bottom: 0;
+}
+.ar #ministere-organigramme ul ul > li > div::before{
+	content: '';
+	position: absolute;
+	right: 0;
+	left: auto;
+	top: 50%;
+	margin-right: -38px;
+	height: 2px;
+	width: 38px;
+	background-color: #ddd;
+}
+#ministere-organigramme ul ul > li > div::before{
+	content: '';
+	position: absolute;
+	left: 0;
+	top: 50%;
+	margin-left: -38px;
+	height: 2px;
+	width: 38px;
+	background-color: #ddd;
+}
+.ar #ministere-organigramme > ul ul{
+	padding-left: 0px;
+	margin-left: 0px;
+	border-left: none;
+	padding-right: 35px;
+	margin-right: 35px;
+	border-right: 2px solid #ddd;
+}
+#ministere-organigramme > ul ul{
+	padding-left: 35px;
+	margin-left: 35px;
+	border-left: 2px solid #ddd;
+	background-color: white;
+}
+#ministere-organigramme > ul ul > li > div{
+	width: 260px;
+	position: relative;
+}
+#ministere-organigramme > ul > li > div{
+	border: 1px solid #ddd;
+}
+#ministere-organigramme li > div{
+	padding: 10px;
+	border: 1px solid #ddd;
+	background-color: #ececec;
+}
+#ministere-organigramme li.parent > div{
+	position: relative;
+	font-weight: bold;
+	color: #555;
+}
+.tab{
+	display: none;
+}
+.tab.active{
+	display: block;
+	min-height: 300px;
+}
+#ministere-adresse-map{
+	height: 133px;
+	width: 160px;
+	background-color: #ececec;
+}
+.ministere-note{
+	display: inline-block;
+	vertical-align: middle;
+    margin: 1px 5px;
+    width: 52px;
+    height: 13px;
+    background-image: url('/static/images/star_off.png');
+}
+.ar .ministere-note > div{
+	background-position: right top;
+}
+.ministere-note > div{
+    height: 100%;
+    background-image: url('/static/images/star_on.png');
+}
+#budget-popup-main > #budget-container-labels{
+	display: block;
+	font-weight: bold;
+}
+.ar #budget-popup-main > #budget-container-labels > div{
+	text-align: left;
+}
+#budget-popup-main > #budget-container-labels > div{
+	display: inline-block;
+	width: 210px;
+	padding: 0 100px;
+	text-align: right;
+}
+</style>
+{% endblock %}
+
+
+{% macro print_organigramme(obj) %}
+	<ul>
+		{% for node in obj %}
+		<li class="{{node.children and 'parent'}}">
+			<span class="ministere-organigramme-mask"></span>
+			<div>
+				<div>{{node.titre|lang}}</div>
+				{% if node.chef %}
+				<div class="grey">{{node.chef|lang}}</div>
+				{% endif %}
+			</div>
+			{% if node.children %}
+			{{print_organigramme(node.children)}}
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+{% endmacro %}
+
+
+{% macro print_agents(obj) %}
+	<ul>
+		{% for node in obj %}
+		<li>
+			<span>{{node.titre|lang}}</span>
+			<span class="grey">{{node.count}}</span>
+			{% if node.children %}
+			{{print_agents(node.children)}}
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+{% endmacro %}
+
+
+{% block main %}
+<table cellpadding="50" cellspacing="0" id="cols"><tr style="vertical-align:top">
+<td id="col-1">
+	<h1>{{ministere.nom|lang}}</h1>
+	<div id="menu">
+		<a href="#" data-tab="ministere-budget" class="tab-link active">{% trans %}Budget{% endtrans %}</a>
+		{% if ministere.agents %}
+		<a href="#" data-tab="ministere-agents" class="tab-link left-15">{% trans %}Agents{% endtrans %}</a>
+		{% endif %}
+		{% if ministere.organigramme %}
+		<a href="#" data-tab="ministere-organigramme" class="tab-link left-15">{% trans %}Organigramme{% endtrans %}</a>
+		{% endif %}
+		{% if ministere.get('download_%s' % g.lang_code) %}
+		<a href="#" data-tab="ministere-data" class="tab-link left-15">{% trans %}Téléchargements{% endtrans %}</a>
+		{% endif %}
+		{% if ministere.contact %}
+		<a href="#" data-tab="ministere-contact" class="tab-link left-15">{% trans %}Adresse{% endtrans %}</a>
+		{% endif %}
+	</div>
+
+	<div id="ministere-budget" class="tab active">
+		<div id="budget">
+			<div class="budget-years"></div>
+		</div>
+		<div class="top-30">
+			<div id="budget-legend" class="float">
+				<div class="developpement"><i class="right-10"></i><span>{% trans %}Dépenses de développement{% endtrans %}</span></div>
+				<div class="fonds_speciaux"><i class="right-10"></i><span>{% trans %}Fonds spéciaux du trésor{% endtrans %}</span></div>
+				<div class="gestion"><i class="right-10"></i><span>{% trans %}Dépenses de gestion{% endtrans %}</span></div>
+			</div>
+			<div id="budget-legend-1" class="float left-40">
+				<div><span class="grey">LF</span> {% trans %}Loi de finance{% endtrans %}</div>
+				<div><span class="grey">LFC</span> {% trans %}Loi de finance complémentaire{% endtrans %}</div>
+			</div>
+		</div>
+		<div id="budget-popup">
+			<div id="budget-popup-container">
+				<a href="#" id="budget-popup-close" class="floati"></a>
+				<div id="budget-popup-header">
+					<div id="budget-popup-years"></div>
+					<div id="budget-popup-labels"></div>
+				</div>
+				<div id="budget-popup-main"></div>
+			</div>
+		</div>
+	</div>
+
+	<div id="ministere-agents" class="tab">
+		<ul>
+		{% for node in ministere.agents.children %}
+		<li>
+			<span class="floati left-10">{{node.count}}</span>
+			<span>{{node.titre|lang}}</span>
+			{% if node.children %}
+			<ul>
+				{% for childnode in node.children %}
+				<li>
+					<span class="floati left-10">{{childnode.count}}</span>
+					<span>{{childnode.titre|lang}}</span>
+				</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</div>
+	
+	{% if ministere.organigramme %}
+	<div id="ministere-organigramme" class="tab">
+		{{print_organigramme(ministere.organigramme.departements)}}
+	</div>
+	{% endif %}
+
+	<div id="ministere-data" class="tab">
+		{% for download in ministere.get('download_%s' % g.lang_code, []) %}
+		{% set file = g.db.dereference(download) %}
+		<a href="{{file|fileurl}}"><img class="float right-10" src="/static/images/download_grey.png"/>{{file.filename}}</a>
+		{% endfor %}
+	</div>
+
+	{% if ministere.contact %}
+	<div id="ministere-contact" class="tab">
+		{% for contact in ministere.contact %}
+		{% if contact.ministere %}
+		<div class="titre bottom-15 {{loop.index > 1 and 'top-30'}}">{{contact.ministere}}</div>
+		{% endif %}
+		<div id="ministere-adresse-map" class="float right-20"></div>
+		{% if contact.tel %}
+		<div>
+			<span class="">{% trans %}Tel{% endtrans %}:</span>
+			{% for tel in contact.tel %}
+			<span class="left-10 grey">{{tel}}</span>
+			{% endfor %}
+		</div>
+		{% endif %}
+		{% if contact.fax %}
+		<div class="top-5">
+			<span class="">{% trans %}Fax{% endtrans %}:</span>
+			{% for fax in contact.fax %}
+			<span class="left-10 grey">{{fax}}</span>
+			{% endfor %}
+		</div>
+		{% endif %}
+		{% if contact.email %}
+		<div class="top-5">
+			<span class="">{% trans %}Email{% endtrans %}:</span>
+			<a href="mailto:{{contact.email}}" target="_blank" class="left-10 grey">{{contact.email}}</a>
+		</div>
+		{% endif %}
+		{% if contact.web %}
+		<div class="top-5">
+			<span class="">{% trans %}Site Web{% endtrans %}:</span>
+			<a href="{{contact.web}}" target="_blank" class="left-10 grey">{{contact.web}}</a>
+		</div>
+		{% endif %}
+		{% if contact.personne|lang %}
+		<div class="top-5">
+			<span>{% trans %}Chargé d'accès à l'information{% endtrans %}:</span>
+			<span class="left-10 grey">{{contact.personne|lang}}</span>
+		</div>
+		{% endif %}
+		{% if ministere.evaluation and ministere.evaluation|count >= loop.index %}
+		<div class="top-5">
+			<span>{% trans %}Accès à l'information{% endtrans %}:</span>
+			<span class="ministere-note"><div style="width:{{(ministere.evaluation[loop.index-1].total or 0)*13/4}}px"></div></span>
+		</div>
+		{% endif %}
+		{% endfor %}
+	</div>
+	{% endif %}
+</td>
+<td id="col-2">
+<div class="top-40">
+	{% for chiffre in ministere.chiffres or [] %}
+	<div class="bottom-15">
+		<span class="strong">
+		{% if chiffre.unite|lang == '%' %}
+		{{ chiffre.value * 100 }}
+		{% else %}
+		{{chiffre.value}}
+		{% endif %}
+		<sub>{{chiffre.unite|lang}}</sub></span>
+		<div class="grey">{{chiffre|lang}}</div>
+	</div>
+	{% endfor %}
+</div>
+</td>
+</tr></table>
+{% endblock %}

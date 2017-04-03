@@ -1,0 +1,434 @@
+# Translations template for PROJECT.
+# Copyright (C) 2015 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2015-12-23 17:30+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.1.1\n"
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:226
+msgid "Droit d'accès à l'information"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:229
+msgid "Qui peut déposer une demande d'accès aux documents administratifs?"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:231
+msgid "Personne physique"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:234
+msgid "Personne morale"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:239
+msgid "Comment rédiger la demande d'accès aux documents administratifs?"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:241
+msgid "Remplir un formulaire administratif"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:246
+msgid "Modèle de demande à telecharger"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:251
+msgid "Adresser une lettre sur papier libre"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:252
+msgid "Conditions à respecter:"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:254
+msgid "Personne physique : Nom, prénom et l’adresse du demandeur"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:255
+msgid "Personne morale : La dénomination sociale et le siège social"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:256
+msgid "Donner les précisions nécessaires relatives à l’information demandée"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:257
+msgid "Préciser l'organisme concerné"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:263
+msgid "Où peut-on déposer la demande d'accès aux documents adminitratifs?"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:265
+msgid "Directement auprès de l'organisme public concerné"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:266
+msgid "Délivrance obligatoire d'un récépissé"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:269
+msgid "Par lettre recommandée"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:270
+msgid "Avec accusé de réception"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:273
+msgid "Par voie électronique"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:276
+msgid "Le responsable chargé de l'accès à l'information doit:"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:278
+msgid "Réceptionner les demandes d’accès à l’information"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:279
+msgid "Informer et orienter le demandeur"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:280
+msgid "Traiter les demandes dans les délais prévus par la loi"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:286
+msgid "Délais"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:290
+msgid "Dépot de la demande d'accès à l'information"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:294
+msgid ""
+"L’organisme public concerné doit fournir une réponse à toute demande dans"
+" un délai de <strong>15 jours</strong>."
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:295
+msgid "Exceptions:"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:297
+msgid "Prolongation du délai initial de <strong>15 jours</strong>"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:298
+msgid ""
+"Raccourcissement des délais: ne pas dépasser les <strong>2 jours</strong>"
+" ouvrables"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:301
+#: /home/user0/www/marsad_budget/templates/acces_information.html:311
+msgid "Si refus"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:304
+msgid "Dépot de la demande de recours gracieux"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:305
+msgid ""
+"Dans un délai ne dépassant pas les <strong>15 jours</strong> qui suivent "
+"la décision de refus ou de la violation des dispositions du décret-loi "
+"n°41"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:309
+msgid ""
+"Le chef de l’organisme doit répondre dans les <strong>10 jours</strong> "
+"suivant la date deréception de la demande en appel."
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:314
+msgid "Recours auprès du tribunal administratif."
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:315
+msgid ""
+"Le demandeur qui n’est pas satisfait de la décision du chef de "
+"l’organisme peut faire appel devant le tribunal administratif dans un "
+"délai de <strong>30 jours</strong>."
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:327
+msgid "Ministère"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:328
+msgid "Note globale"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:329
+msgid "Accueil et orientation"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:330
+msgid "Procédure de dépôt"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:331
+msgid "Délais de réponse"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/acces_information.html:332
+msgid "Qualité de l'information"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:6
+#: /home/user0/www/marsad_budget/templates/index.html:224
+msgid "Marsad Budget"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:42
+msgid "MARSAD"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:44
+msgid "budget"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:73
+msgid "Marsad"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:74
+msgid "Qui sommes nous"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:75
+#: /home/user0/www/marsad_budget/templates/wiki.html:51
+msgid "Glossaire"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:76
+msgid "Documents"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:79
+msgid "Pages spéciales"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:80
+#: /home/user0/www/marsad_budget/templates/index.html:246
+#: /home/user0/www/marsad_budget/templates/ministere.html:578
+msgid "Accès à l'information"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:81
+msgid "Focus: Dette publique"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:82
+msgid "Focus: Compensation"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:83
+#: /home/user0/www/marsad_budget/templates/index.html:242
+#: /home/user0/www/marsad_budget/templates/processus_budgetaire.html:161
+msgid "Processus budgétaire"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/base.html:87
+msgid "Al Bawsala"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/budget_etat.html:254
+msgid "BUDGET"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/budget_etat.html:255
+msgid "de l'État"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/budget_etat.html:259
+msgid "Télécharger"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/budget_etat.html:259
+msgid "dépenses"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/budget_etat.html:259
+msgid "recettes"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:55
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:67
+msgid "Hypothèses"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:56
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:69
+msgid "Objectifs"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:57
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:71
+msgid "Performance macroéconomique 2015"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:58
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:73
+msgid "Exécution du budget 2015 de développement"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:59
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:75
+msgid "Dépenses de gestion 2016"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:60
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:77
+msgid "Quelques projets de développement"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:61
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:84
+msgid "Les objectifs fiscaux et leur impact financier"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:62
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:86
+msgid "Principales mesures fiscales et douanières"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:63
+#: /home/user0/www/marsad_budget/templates/focus_LF2016.html:88
+msgid "Changements notables du projet de loi"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:226
+msgid "Plus d'informations"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:230
+msgid "Loi de finances 2016"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:231
+#: /home/user0/www/marsad_budget/templates/index.html:235
+#: /home/user0/www/marsad_budget/templates/index.html:239
+msgid "Infographie"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:234
+msgid "Compensation"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:238
+msgid "Dette publique"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:243
+msgid "Étapes et délais"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:247
+msgid "Explication de la procédure"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:254
+msgid "Sans dette et<br>sans compensation"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:256
+msgid "Dépenses de l'État"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:267
+msgid "Total dépenses"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/index.html:270
+msgid "MDT"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:460
+msgid "Budget"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:462
+msgid "Agents"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:465
+msgid "Organigramme"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:468
+msgid "Téléchargements"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:471
+msgid "Adresse"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:481
+msgid "Dépenses de développement"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:482
+msgid "Fonds spéciaux du trésor"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:483
+msgid "Dépenses de gestion"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:486
+#: /home/user0/www/marsad_budget/templates/processus_budgetaire.html:168
+msgid "Loi de finance"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:487
+msgid "Loi de finance complémentaire"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:544
+msgid "Tel"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:552
+msgid "Fax"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:560
+msgid "Email"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:566
+msgid "Site Web"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/ministere.html:572
+msgid "Chargé d'accès à l'information"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/processus_budgetaire.html:169
+msgid "Étapes et délais prévus par la loi"
+msgstr ""
+
+#: /home/user0/www/marsad_budget/templates/processus_budgetaire.html:197
+msgid "télécharger"
+msgstr ""
+
