@@ -948,7 +948,7 @@ def delete_articles(article_id):
 def budget_to_json(filename):
 	To_return = []
 	tmp_dict = {}
-	wb = load_workbook(filename)
+	wb = load_workbook(filename ,  data_only=True, read_only=True)
 	sheet = wb.get_sheet_by_name(wb.get_sheet_names()[0])
 	data = enumerate(list(sheet.rows)[2:])
 	for i,row in data:
@@ -956,7 +956,6 @@ def budget_to_json(filename):
 			tmp_dict["ar"] = row[0].value
 			tmp_dict["fr"] = row[1].value
 			tmp_dict["total"] = row[2].value
-			print tmp_dict["total"]
 			tmp_dict["remunerations_publique"] =  row[3].value or 0
 			tmp_dict["moyens_des_services"] =  row[4].value or 0
 			tmp_dict["interventions_publiques"] =  row[5].value or 0
@@ -968,32 +967,24 @@ def budget_to_json(filename):
 			tmp_dict["ressources_exterieures_affectees"] =  row[12].value or 0
 			tmp_dict["Remboursement_dette_publique"] =  row[13].value or 0
 			tmp_dict["fonds_speciaux"] = row[15].value or 0
-			tmp_dict["gestion"] =  tmp_dict["moyens_des_services"]
-			tmp_dict["gestion"] +=  tmp_dict["interventions_publiques"]
-			tmp_dict["gestion"] +=  tmp_dict["remunerations_publique"]
-			tmp_dict["gestion"] +=  tmp_dict["disposition_urgence"]
-			tmp_dict["gestion"] +=  tmp_dict["Avantages_dette_publique"]
-			tmp_dict["developpement"] =  tmp_dict["Investissements_direct"]
-			tmp_dict["developpement"] +=  tmp_dict["financement_public"]
-			tmp_dict["developpement"] +=  tmp_dict["ressources_exterieures_affectees"]
-			tmp_dict["developpement"] +=  tmp_dict["Depenses_developpement_urgence"]
-			tmp_dict["developpement"] +=  tmp_dict["Remboursement_dette_publique"]
+			tmp_dict["gestion"] =  row[8].value or 0
+			tmp_dict["developpement"] =  row[14].value or 0
 
 			To_return.append(tmp_dict)
 			tmp_dict = {}
 	return To_return
 
 def link_budgets(budgets , year , budget_type):
-	linked_bugets = []
 	for budget in budgets:
 		obj = {}
 		ministere = g.db.find_one('ministeres' , {'nom.fr' : {'$regex' : budget['fr'] }})
 		obj['budget']	 = {}
 		obj['budget']['children'] = {}
-		obj['annee']	 = year
+		obj['budget']['total']	 = budget['total']
+		obj['annee']	 = int(year)
 		obj['type'] 	 = budget_type
 		if budget['developpement'] != 0:
-			obj['budget']['children']['developpement'] = {'montant' : budget['developpement'] / 1000.0 , children : []}
+			obj['budget']['children']['developpement'] = {'montant' : budget['developpement'] / 1000000.0 , 'children' : []}
 			if budget['Investissements_direct'] != 0:
 				obj['budget']['children']['developpement']['children'].append({ 'ref' : 'Investissements_direct' , 'montant' : budget['Investissements_direct'] / 1000000.0})
 			if budget['financement_public'] != 0:
@@ -1005,7 +996,7 @@ def link_budgets(budgets , year , budget_type):
 			if budget['Remboursement_dette_publique'] != 0:
 				obj['budget']['children']['developpement']['children'].append({ 'ref' : 'Remboursement_dette_publique' , 'montant' : budget['Remboursement_dette_publique'] / 1000000.0})
 		if budget['gestion'] != 0:
-			obj['budget']['children']['gestion'] = { 'montant' : budget['gestion'] / 1000.0  , children : []}
+			obj['budget']['children']['gestion'] = { 'montant' : budget['gestion'] / 1000000.0  , 'children' : []}
 			if budget['moyens_des_services'] != 0:
 				obj['budget']['children']['gestion']['children'].append({ 'ref' : 'moyens_des_services' , 'montant' : budget['moyens_des_services'] / 1000000.0 })
 			if budget['interventions_publiques'] != 0:
@@ -1017,17 +1008,22 @@ def link_budgets(budgets , year , budget_type):
 			if budget['Avantages_dette_publique'] != 0:
 				obj['budget']['children']['gestion']['children'].append({ 'ref' : 'Avantages_dette_publique' , 'montant' : budget['Avantages_dette_publique'] / 1000000.0 })
 		if budget['fonds_speciaux'] != 0:
-			obj['budget']['children']['fonds_speciaux'] =  { 'montant' : budget['fonds_speciaux'] / 1000000.0 , children : [] }
+			obj['budget']['children']['fonds_speciaux'] =  { 'montant' : budget['fonds_speciaux'] / 1000000.0 , 'children' : [] }
 		if ministere != None:
 			obj['ministere'] = DBRef(collection='ministeres',id=ministere['_id'])
+			g.db.insert('budgets',obj)
 		else:
-			obj['budget']['titre'] = { 'ar' : budget['ar'] , 'fr' : budget['fr']}
-			if budget['fr'] == "La Dette Publique":
-				obj['budget']['icon'] = 'icon_dette.png'
-				obj['budget']['id']	  = 'dette_publique'
-			else:
-				obj['budget']['id']   = budget['fr'].replace(' ','_')
-		g.db.insert('budgets',obj)
+			if budget['fr'] != 'Total':
+
+				if budget['fr'] == "La Dette Publique" or budget['fr'] == "La Dette Publqiue":
+					obj['budget']['titre'] = {'fr': u'Dette publique', 'ar': u'دين عمومي'}
+					obj['budget']['icon']  = 'icon_dette.png'
+					obj['budget']['id']	   = 'dette_publique'
+				else:
+					obj['budget']['titre'] = { 'ar' : budget['ar'] , 'fr' : budget['fr']}
+					obj['budget']['id']	   = budget['fr'].replace(' ','_').replace(u'é','e')
+				g.db.insert('budgets',obj)
+
 
 
 @login_required
