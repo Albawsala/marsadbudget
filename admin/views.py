@@ -279,6 +279,61 @@ def touch_document(collection, doc_id):
 	return "ping", 200
 
 
+def rh_to_json (filename):
+	childrens = []
+	To_return = []
+	tmp_dict = {}
+	unbold_dict = {}
+	wb = load_workbook(filename ,  data_only=True, read_only=True)
+	sheet = wb.get_sheet_by_name(wb.get_sheet_names()[0])
+	data = enumerate(list(sheet.rows)[0:])
+	for i,row in data:
+		if (row[0].value and row[1].value and ( not row[0].value == "Total" )):
+			if (row[0].font.b):
+				tmp_dict = {"count" : row[2].value , "titre" : {"fr" : row[0].value , "ar" : row[1].value} , "children" : [] }
+				childrens.append(tmp_dict)
+				tmp_dict = {}
+			else:
+				unbold_dict = {"count" : row[2].value , "titre" : {"fr" : row[0].value , "ar" : row[1].value} , "children" : [] }
+				childrens[-1]["children"].append(unbold_dict)
+				unbold_dict = {}
+		elif (row[0].value == "Total"):
+			tmp_dict = {}
+			tmp_dict["total"] = row[2].value
+			tmp_dict["children"] = childrens
+			To_return.append(tmp_dict)
+	return To_return
+
+def updata_human_resources (json , ministere):
+	ministere = g.db.find_one('ministeres' , {'_id' : ministere })
+	ministere["agents"] = json[0]
+
+	g.db.save('ministeres' , ministere)
+	return True
+
+@login_required
+@editor_required
+def add_resources_humaines():
+	if request.method == 'POST':
+		if 'rh_XL' not in request.files:
+			return render_template('add_rh.html',error ='please select a file')
+		elif request.form.get('ministere') == '':
+			return render_template('add_rh.html',error ='please select ministere')
+		else:
+			xl = request.files['rh_XL']
+			if xl.filename == '':
+				return render_template('add_rh.html',error ='select a file please')
+			else:
+				if xl.filename[-4:] in ALLOWED_EXTENSIONS:
+					xl.save(UPLOAD_FOLDER+xl.filename)
+					updata_human_resources(rh_to_json(UPLOAD_FOLDER+xl.filename) , request.form.get('ministere') )
+					return redirect(url_for('admin.collections'))
+				else:
+					return render_template('add_rh.html',error ='select a valid file please')
+	return render_template('add_rh.html',
+		ministeres = list(g.db.find('ministeres'))
+	)
+
 @login_required
 @editor_required
 def find_document(collection):
