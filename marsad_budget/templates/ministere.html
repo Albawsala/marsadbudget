@@ -20,12 +20,12 @@ var ministere_coords;
 <style type="text/css">
 #main{
 	height: 100%;
-	margin-top: 0; 
+	margin-top: 0;
 }
 #cols{
 	width: 100%;
 	height: 100%;
-	padding-top: 52px; 
+	padding-top: 52px;
 }
 #col-1{
 	width: 500px;
@@ -454,7 +454,7 @@ sub{
 
 {% block main %}
 <table cellpadding="50" cellspacing="0" id="cols"><tr style="vertical-align:top">
-<td id="col-1">
+<td id="col-1" style="width : 75%">
 	<h1>{{ministere.nom|lang}}</h1>
 	<div id="menu">
 		<a href="#" data-tab="ministere-budget" class="tab-link active">{% trans %}Budget{% endtrans %}</a>
@@ -518,7 +518,7 @@ sub{
 		</li>
 		{% endfor %}
 	</div>
-	
+
 	{% if ministere.organigramme %}
 	<div id="ministere-organigramme" class="tab">
 		{{print_organigramme(ministere.organigramme.departements)}}

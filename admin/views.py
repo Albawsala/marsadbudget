@@ -977,7 +977,7 @@ def budget_to_json(filename):
 def link_budgets(budgets , year , budget_type):
 	for budget in budgets:
 		obj = {}
-		ministere = g.db.find_one('ministeres' , {'nom.fr' : {'$regex' : budget['fr'] }})
+		ministere = g.db.find_one('ministeres' , {'nom.ar' : {'$regex' : budget['ar'] , "$options": 'i'}})
 		obj['budget']	 = {}
 		obj['budget']['children'] = {}
 		obj['budget']['total']	 = budget['total']
@@ -1011,6 +1011,16 @@ def link_budgets(budgets , year , budget_type):
 			obj['budget']['children']['fonds_speciaux'] =  { 'montant' : budget['fonds_speciaux'] / 1000000.0 , 'children' : [] }
 		if ministere != None:
 			obj['ministere'] = DBRef(collection='ministeres',id=ministere['_id'])
+			# if budget_type == "LF":
+			# 	prev = g.db.find_one('budget' , {'ministere' : DBRef(collection='ministeres',id=ministere['_id']) , 'annee' : int(year)-1 , 'type' : 'LFC'}) or g.db.find_one('budget' , {'ministere' : DBRef(collection='ministeres',id=ministere['_id']) , 'annee' : int(year)-1 , 'type' : 'LF'})
+			# elif budget_type == "LFC":
+			# 	prev = g.db.find_one('budget' , {'ministere' : DBRef(collection='ministeres',id=ministere['_id']) , 'annee' : int(year) , 'type' : 'LF' })
+			# 	if prev == None:
+			# 		prev = g.db.find_one('budget' , {'ministere' : DBRef(collection='ministeres',id=ministere['_id']) , 'annee' : int(year)-1 , 'type' : 'LFC'}) or g.db.find_one('budget' , {'ministere' : DBRef(collection='ministeres',id=ministere['_id']) , 'annee' : int(year)-1 , 'type' : 'LF'})
+			# if prev == None:
+			# 	obj['budget']['evolution'] = 0
+			# else:
+			# 	obj['budget']['evolution'] = ( obj['budget']['total'] - prev['budget']['total'] ) / (prev['budget']['total'] / 1.0 )
 			g.db.insert('budgets',obj)
 		else:
 			if budget['fr'] != 'Total':
