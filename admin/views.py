@@ -21,7 +21,7 @@ import os
 import iso8601
 from pprint import pprint
 ALLOWED_EXTENSIONS = set(['xlsx'])
-UPLOAD_FOLDER = '/tmp/'
+UPLOAD_FOLDER = '/home/user0/www/uploads/marsad_budget/documents/'
 def test():
 	return 'Hello World'
 
