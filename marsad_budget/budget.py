@@ -12,7 +12,6 @@ def unit_of_work(spreedsheet):
     sheet = spreedsheet.get_sheet_by_name(spreedsheet.get_sheet_names()[0])
     data = enumerate(list(sheet.rows)[2:])
     for i,row in data:
-        if ( row[0].value and  row[1].value and row[2].value ) :
             print row[0].value
             tmp_dict["ar"] = row[0].value
             tmp_dict["fr"] = row[1].value
@@ -89,5 +88,34 @@ def unit_of_work(spreedsheet):
             tmp_dict = {}
     return To_return
 
+
+
+
+def rh_to_json(spreedsheet):
+    childrens = []
+    To_return = []
+    tmp_dict = {}
+    unbold_dict = {}
+    sheet = spreedsheet.get_sheet_by_name(spreedsheet.get_sheet_names()[0])
+    data = enumerate(list(sheet.rows)[0:])
+    for i,row in data:
+        if (row[0].value and row[1].value and ( not row[0].value == "Total" )):
+            if (row[0].font.b):
+                tmp_dict = {"count" : row[2].value , "titre" : {"fr" : row[0].value , "ar" : row[1].value} , "children" : [] }
+                childrens.append(tmp_dict)
+                tmp_dict = {}
+            else:
+                unbold_dict = {"count" : row[2].value , "titre" : {"fr" : row[0].value , "ar" : row[1].value} , "children" : [] }
+                childrens[-1]["children"].append(unbold_dict)
+                unbold_dict = {}
+        elif (row[0].value == "Total"):
+                tmp_dict = {}
+                tmp_dict["total"] = row[2].value
+                tmp_dict["children"] = childrens
+                To_return.append(tmp_dict)
+
+    return To_return
+
+
 if __name__ == "__main__":
-    unit_of_work(load_spreedsheet("LF2017.xlsx"))
+    rh_to_json(load_spreedsheet("rh.xlsx"))
