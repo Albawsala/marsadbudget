@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block header %}
+<!-- <script>
+$(document).ready( () => {
+  $(".delete_budget").click( ()=> {
+    alert($(this).prop('data-i'))
+  })
+})
+</script> -->
+{% endblock %}
+{% block content %}
+<div id="content" class="floati">
+  <hr>
+  <div class="panel panel-info">
+    <div class="panel-heading">Budgets <span class="pull-right"><a class="btn btn-default btn-sm" style="padding-bottom : 3px" href="{{url_for('admin.new_budget')}}">New</a></div>
+    <div class="panel-body">
+      <div class="list-group">
+        <a class="list-group-item active" href="#">
+          <div class="btn-group btn-group-justified active disabled" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+              année
+            </div>
+            <div class="btn-group" role="group">
+              type
+            </div>
+            <div class="btn-group" role="group">
+              Action
+            </div>
+          </div>
+        </a>
+        {% for budget in budgets %}
+        <a class="list-group-item" href="#">
+          <div class="btn-group btn-group-justified" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+              {{ budget.year }}
+            </div>
+            <div class="btn-group" role="group">
+              {{  budget.type }}
+            </div>
+            <div class="btn-group" role="group">
+              <div class="btn btn-default delete_budget" data-i=0 onclick="location.replace(`{{url_for('admin.remove_budget' , year = budget.year , budget_type = budget.type)}}`)">DELETE</div>
+            </div>
+
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+<div id="commandbar" class="floati">
+
+</div>
+{% endblock %}

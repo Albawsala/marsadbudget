@@ -1054,7 +1054,23 @@ def add_budget():
 				if xl.filename[-4:] in ALLOWED_EXTENSIONS:
 					xl.save(UPLOAD_FOLDER+xl.filename)
 					link_budgets( budget_to_json(UPLOAD_FOLDER+xl.filename) , request.form.get('budget_year') , request.form.get('budget_type'))
-					return redirect(url_for('admin.collections'))
+					return redirect(url_for('admin.budgets'))
 				else:
 					return render_template('add_budget.html',error ='select a valid file please')
 	return render_template('add_budget.html')
+
+@login_required
+@editor_required
+def view_budgets():
+	list_buds = []
+	budgets = g.db.find('budgets',)
+	for budget in budgets:
+		list_buds.append({'year' : budget['annee'] , 'type' : budget['type']})
+	list_buds = sorted(dict(((v['year'] , v['type']),v) for v in list_buds).values())
+	return render_template('budgets.html' , budgets = list_buds)
+
+@login_required
+@editor_required
+def delete_budget(year , budget_type):
+	g.db.remove('budgets' , {'annee' : int(year) , 'type' : budget_type})
+	return redirect(url_for('admin.budgets'))
