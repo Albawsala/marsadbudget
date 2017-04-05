@@ -525,3 +525,6 @@ msgstr"معلومات"
 
 msgid "articles"
 msgstr"مقالات"
+
+msgid "Précédemment"
+msgstr "سابقا"

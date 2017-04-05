@@ -585,6 +585,13 @@ sub{
 </td>
 <td id="col-2">
 <div class="top-40">
+	{% if previous != None %}
+		<p>{%trans%}Précédemment{%endtrans%}</p>
+		<a href="{{url_for('root.ministere' , ministere_id=previous.abbr)}}">{{previous.nom | lang}}</a>
+	{% endif %}
+	{% if ministere.chiffres and previous %}
+				<hr>
+	{% endif %}
 	{% for chiffre in ministere.chiffres or [] %}
 	<div class="bottom-15">
 		<span class="strong">

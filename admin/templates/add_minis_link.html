@@ -10,29 +10,33 @@
 </div>
   {% endif %}
   <div class="panel panel-info">
-    <div class="panel-heading">Add RH </div>
+      <div class="panel-heading">Link ministries</div>
     <div class="panel-body">
-      <form class="" action="" enctype="multipart/form-data" method="post">
+      <form class="" action="" method="post">
         <div class="panel panel-warning">
-          <div class="panel-heading">Ministere</div>
+          <div class="panel-heading">Previous Ministry</div>
           <div class="panel-body">
-          <select name="ministere" >
+          <select name="prevministere" >
             {% for min in ministeres %}
-            <<option value="{{min["_id"]}}"> {{ min["nom"].ar }} </option>
+            <option value="{{min["_id"]}}"> {{ min["nom"].ar }} </option>
             {% endfor %}
 
            </select>
           </div>
         </div>
 
-        <div class="panel panel-success">
-          <div class="panel-heading">file</div>
+        <div class="panel panel-warning">
+          <div class="panel-heading">Current Ministry</div>
           <div class="panel-body">
-            <input type="file" class="form-control" name="rh_XL" required>
+          <select name="currministere" >
+            {% for min in ministeres %}
+            <option value="{{min["_id"]}}"> {{ min["nom"].ar }} </option>
+            {% endfor %}
+           </select>
           </div>
         </div>
         <hr>
-        <input type="submit" class="btn btn-lg btn-success" value="add">
+        <input type="submit" class="btn btn-lg btn-success" value="link">
       </form>
     </div>
   </div>

@@ -98,7 +98,9 @@ root.add_url_rule('/rh/add' , 'resources_humaines' , views.add_resources_humaine
 #root.add_url_rule('/resources' , 'resources' , views.show_resources)
 #root.add_url_rule('/resources/edit/<resource_id>' , 'edit_resource' , views.edit_resource , methods=['GET','POST'])
 root.add_url_rule('/budgets/delete/<year>/<budget_type>', 'remove_budget',views.delete_budget)
-
+root.add_url_rule('/minislinks/add', 'add_minislinks',views.add_ministry_link ,  methods=['GET','POST'])
+root.add_url_rule('/minislinks', 'minislinks',views.ministry_links)
+root.add_url_rule('/minislinks/delete/<minisid_curr>/<minisid_prev>', 'remove_minislink',views.delete_minis_link)
 for rule,endpoint,view,opts in app.config.get('VIEWS', {}).values():
 	root.add_url_rule(rule, endpoint, view, **opts)
 

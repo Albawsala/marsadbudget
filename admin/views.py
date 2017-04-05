@@ -1129,3 +1129,36 @@ def view_budgets():
 def delete_budget(year , budget_type):
 	g.db.remove('budgets' , {'annee' : int(year) , 'type' : budget_type})
 	return redirect(url_for('admin.budgets'))
+
+@login_required
+@editor_required
+def add_ministry_link():
+	ministries = list(g.db.find('ministeres',))
+	if request.method == "POST":
+		if request.form.get('prevministere') == '':
+			return render_template('add_minis_link.html',error = "please select a ministry" , ministeres = ministries)
+		if request.form.get('currministere') == '':
+			return render_template('add_minis_link.html',error = "please select a ministry" , ministeres = ministries)
+		g.db.insert('ministrieslinks' , {'current' : request.form.get('currministere') , 'previous' : request.form.get('prevministere') })
+		return redirect(url_for('admin.minislinks'))
+	return render_template('add_minis_link.html', ministeres = ministries)
+
+
+@login_required
+@editor_required
+def ministry_links():
+	all_links = g.db.find('ministrieslinks')
+	links = []
+	for link in all_links:
+		links.append(
+		{
+			'current' : g.db.find_one('ministeres' , {'_id' : link['current']}),
+			'previous': g.db.find_one('ministeres' , {'_id' : link['previous']}),
+		})
+	return render_template('minislinks.html' , links = links)
+
+@login_required
+@editor_required
+def delete_minis_link(minisid_curr , minisid_prev):
+	g.db.remove('ministrieslinks' , {'current' : minisid_curr , 'previous' : minisid_prev})
+	return redirect(url_for('admin.minislinks'))

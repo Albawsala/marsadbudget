@@ -146,6 +146,11 @@ def acces_information_view():
 def ministere_view(ministere_id):
 	ministere = g.db.find_one('ministeres', {'abbr': ministere_id}) or abort(404)
 	budgets = g.db.find('budgets', {'ministere.$id': ministere['_id']}, sort=[('annee',1),('type',1)])
+	link= g.db.find_one('ministrieslinks' , {'current' :  str(ministere['_id'])})
+	if link != None:
+		previous = g.db.find_one('ministeres' , {'_id' : link['previous']})
+	else:
+		previous = None
 	mapper = lambda x: {
 		'budget': x['budget'],
 		'annee': x['annee'],
@@ -155,6 +160,7 @@ def ministere_view(ministere_id):
 		ministere = ministere,
 		budget_labels = g.db.find_one('data', {'nom':'budget_labels'}),
 		budgets = map(mapper, budgets),
+		previous= previous,
 	)
 
 
